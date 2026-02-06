@@ -442,17 +442,24 @@
         let totalUnits = 0;
 
         favItems.forEach((item, index) => {
-            text += `${index + 1}. ${item.name}\n🔹 کد: ${item.code}\n🔸 واحد: ${item.unit}\n\n`;
+            // نمایش واحد فقط اگر مقدار آن بزرگتر از 0 باشد، در غیر این صورت "نامشخص"
+            const unitText = item.unit > 0 ? item.unit : "نامشخص";
+            text += `${index + 1}. ${item.name}\n🔹 کد: ${item.code}\n🔸 واحد: ${unitText}\n\n`;
             totalUnits += item.unit;
         });
 
-        text += `✅ مجموع واحدها: ${totalUnits}\n📍 ساخته شده در سامانه انتخاب واحد`;
+        text += `✅ مجموع واحدها: ${totalUnits}\n\n`;
+        text += `📍 ساخته شده در https://iaucourseexp.github.io/CoursesCodes/`;
 
         if (navigator.share) {
-            navigator.share({ title: 'لیست دروس من', text: text }).catch(console.error);
+            navigator.share({
+                title: 'لیست دروس من',
+                text: text,
+            }).catch(console.error);
         } else {
+            // اگر مرورگر از Share API پشتیبانی نکند (مثل برخی نسخه‌های دسکتاپ)
             copyToClipboard(text);
-            alert("متن لیست برای اشتراک‌گذاری کپی شد!");
+            alert("متن لیست برای اشتراک‌گذاری در کلیپ‌بورد کپی شد!");
         }
     }
 
@@ -460,4 +467,5 @@
     renderCodes();
 </script>
 </body>
+
 </html>
