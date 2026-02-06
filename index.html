@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کد دروس</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #f8fafc;
+        }
+        .glass-header {
+            background: rgba(206, 173, 173, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(236, 253, 0, 0.801);
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="pb-24"> <header class="fixed top-0 left-0 right-0 z-50 glass-header custom-shadow">
+    <div class="max-w-4xl mx-auto p-4 flex flex-col items-center text-center">
+        <h1 class="text-xl font-bold text-gray-800">کد دروس</h1>
+        <p class="text-xs text-gray-500 mt-1 mb-3">مرجع سریع کدهای دروس - نسخه بهمن ۱۴۰۴</p>
+        
+        <div class="flex flex-wrap justify-center gap-3 text-sm">
+            <a href="https://t.me/IAUCourseExp" target="_blank" class="text-blue-600 hover:underline font-bold">کانال تجربیات</a>
+            <span class="text-gray-300">|</span>
+            <a href="https://t.me/IAUCourseExpgroup" target="_blank" class="text-blue-600 hover:underline font-bold">گروه تجربیات</a>
+            <span class="text-gray-300">|</span>
+            <a href="https://t.me/jozveiau" target="_blank" class="text-blue-600 hover:underline font-bold">کانال جزوه</a>
+            <span class="text-gray-300">|</span>
+            <a href="https://t.me/computeriaushz" target="_blank" class="text-blue-600 hover:underline font-bold">کامپیوتر شیراز</a>
+            <span class="text-gray-300">|</span>
+            <a href="https://t.me/DevLeap" target="_blank" class="text-blue-600 hover:underline font-bold">DevLeap</a>
+        </div>
+    </div>
+</header>
+
+    <main class="max-w-4xl mx-auto mt-48 px-4">
+        
+        <div class="sticky top-28 z-40 bg-white/50 p-2 rounded-xl mb-6 glass-header border border-white/50">
+            <div class="flex gap-2">
+                <input type="text" id="searchInput" 
+                    placeholder="جستجوی نام درس یا کد..." 
+                    class="flex-1 p-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-400 outline-none transition-all shadow-sm">
+                
+                <button onclick="toggleShowOnlyFavs()" id="favFilterBtn" 
+                    class="bg-white border border-gray-200 p-3 rounded-lg shadow-sm hover:bg-yellow-50 transition-colors" title="فقط نمایش ستاره‌دارها">
+                    ⭐
+                </button>
+            </div>
+            
+            <div class="flex gap-2 mt-4">
+                <button id="btn-403" onclick="filterCategory('403')" class="flex-1 bg-blue-600 text-white py-3 rounded-xl font-medium shadow-md transition-all">۴۰۳ به بعد</button>
+                <button id="btn-402" onclick="filterCategory('402')" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-medium shadow-md transition-all">۴۰۲ به قبل</button>
+            </div>
+
+            <div class="mt-3">
+                <select id="sortSelect" onchange="renderCodes(document.getElementById('searchInput').value)" 
+                    class="w-full p-2 rounded-lg border border-gray-200 text-sm bg-white outline-none text-gray-600">
+                    <option value="default"> ترتیب پیش‌فرض</option>
+                    <option value="name">🔤 مرتب‌سازی بر اساس نام درس</option>
+                    <option value="code">🔢 مرتب‌سازی بر اساس کد درس</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="codesContainer" class="space-y-3">
+            <p class="text-center text-gray-400 mt-10">در حال بارگذاری لیست دروس...</p>
+        </div>
+
+    </main>
+
+    <div id="footerStats" class="fixed bottom-4 left-4 right-4 max-w-md mx-auto bg-gray-900 text-white p-4 rounded-2xl shadow-2xl flex justify-between items-center hidden">
+        <div>
+            <span class="text-sm opacity-80">واحدهای انتخاب شده:</span>
+            <span id="totalCredits" class="text-xl font-bold text-yellow-400 mr-2">0</span>
+        </div>
+        <button onclick="shareFavorites()" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg text-sm transition-colors">
+            اشتراک‌گذاری 📤
+        </button>
+    </div>
+
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-2 rounded-full shadow-lg opacity-0 transition-opacity pointer-events-none">
+        کپی شد! ✅
+    </div>
+<script>
+    // ۱. دیتابیس دروس (می‌توانی دروس خودت را اینجا اضافه کنی)
+    const allCodes = [
+        // --- دروس ۴۰۲ به قبل ---
+        { id: 1, name: "آز ریز پردازنده", code: "4628102126", unit: 1, category: "402" },
+        { id: 2, name: "آز مدار منطقی و معماری کامپیوتر", code: "4628181640", unit: 1, category: "402" },
+        { id: 3, name: "مدار الکتریکی", code: "4628147685", unit: 3, category: "402" },
+        { id: 4, name: "ریاضیات گسسته", code: "4628129880", unit: 3, category: "402" },
+        { id: 5, name: "برنامه سازی پیشرفته", code: "4628111667", unit: 3, category: "402" },
+        { id: 6, name: "سیگنالها و سیستم ها", code: "4628135313", unit: 3, category: "402" },
+        { id: 7, name: "ریز پردازنده و زبان اسمبلی", code: "4628130341", unit: 3, category: "402" },
+        { id: 8, name: "شبکه های کامپیوتری", code: "4628135451", unit: 3, category: "402" },
+        { id: 9, name: "هوش مصنوعی", code: "4628155511", unit: 3, category: "402" },
+        { id: 10, name: "ساختمان داده", code: "4628132653", unit: 3, category: "402" },
+        { id: 11, name: "مدار منطقی", code: "4628147873", unit: 3, category: "402" },
+        { id: 12, name: "نظریه زبان", code: "4628153620", unit: 3, category: "402" },
+        { id: 13, name: "زبان تخصصی", code: "4628130407", unit: 2, category: "402" },
+        { id: 14, name: "روش پژوهش و ارائه", code: "4628127605", unit: 2, category: "402" },
+        { id: 15, name: "ریاضیات مهندسی", code: "4628129896", unit: 3, category: "402" },
+        { id: 16, name: "معماری کامپیوتر", code: "4628150474", unit: 3, category: "402" },
+        { id: 17, name: "سیستم های عامل", code: "4628169362", unit: 3, category: "402" },
+        { id: 18, name: "طراحی الگوریتم", code: "4628137064", unit: 3, category: "402" },
+        { id: 19, name: "سیستم های دیجیتال", code: "4628164617", unit: 3, category: "402" },
+        { id: 20, name: "اصول طراحی کامپایلر", code: "4628105622", unit: 3, category: "402" },
+        { id: 21, name: "آز سیستم عامل", code: "4628102246", unit: 1, category: "402" },
+        { id: 22, name: "آز شبکه", code: "4628101498", unit: 1, category: "402" },
+        { id: 23, name: "مبانی کامپیوتر", code: "4628145941", unit: 3, category: "402" },
+        { id: 24, name: "پیاده سازی پایگاه داده", code: "4628181643", unit: 3, category: "402" },
+        { id: 25, name: "مبانی داده کاوی", code: "4628144915", unit: 3, category: "402" },
+        { id: 26, name: "مبانی بازیابی اطلاعات و جستجوی وب", code: "4628164509", unit: 3, category: "402" },
+        { id: 27, name: "سیستم اطلاعات مدیریت", code: "4628171999", unit: 3, category: "402" },
+        { id: 28, name: "سیستم چند رسانه‌ای", code: "4628135053", unit: 3, category: "402" },
+        { id: 29, name: "آزمایشگاه مهندسی نرم افزار", code: "4628102924", unit: 1, category: "402" },
+        { id: 30, name: "کارگاه برنامه نویسی متلب", code: "4628182893", unit: 1, category: "402" },
+        { id: 31, name: "آز مدار الکتریکی", code: "4628102805", unit: 1, category: "402" },
+        { id: 32, name: "گرافیک کامپیوتری", code: "4628142462", unit: 3, category: "402" },
+        { id: 33, name: "مباحث ویژه 1", code: "4628143773", unit: 3, category: "402" },
+        { id: 34, name: "آز پایگاه داده", code: "4628101485", unit: 1, category: "402" },
+        { id: 35, name: "تحلیل طراحی", code: "4628117515", unit: 3, category: "402" },
+        { id: 36, name: "پایگاه داده", code: "4628114001", unit: 3, category: "402" },
+        { id: 37, name: "طراحی زبان", code: "4628137355", unit: 3, category: "402" },
+        { id: 38, name: "مهندسی نرم افزار", code: "4628164737", unit: 3, category: "402" },
+        { id: 39, name: "مهندسی اینترنت", code: "4628151527", unit: 3, category: "402" },
+        { id: 40, name: "پروژه نرم افزار", code: "4628183688", unit: 3, category: "402" },
+        { id: 41, name: "کارآموزی", code: "4628156372", unit: 1, category: "402" },
+        { id: 42, name: "پروژه فناوری اطلاعات", code: "4628114947", unit: 3, category: "402" },
+        { id: 43, name: "یکپارچه سازی کاربرد های سازمانی", code: "4628162051", unit: 3, category: "402" },
+        { id: 44, name: "مدیریت پروژه های فناوری اطلاعات", code: "4628148579", unit: 3, category: "402" },
+        { id: 45, name: "اصول مدیریت و برنامه ریزی راهبرد های فناوری اطلاعات", code: "4628105928", unit: 3, category: "402" },
+        { id: 46, name: "مبانی رایانش امن", code: "4628144960", unit: 3, category: "402" },
+        { id: 47, name: "تجارت الکترونیکی", code: "4628116851", unit: 3, category: "402" },
+        { id: 48, name: "اصول فناوری اطلاعات", code: "4628105776", unit: 3, category: "402" },
+        { id: 49, name: "اقتصاد مهندسی", code: "4628107113", unit: 3, category: "402" },
+        { id: 50, name: "کارگاه کامپیوتر", code: "4628160442", unit: 1, category: "402" },
+        { id: 51, name: "آز فیزیک 2", code: "4628102515", unit:1, category: "402" },
+        { id: 52, name: "آمار احتمالات مهندسی", code: "4628107851", unit: 3, category: "402" },
+        { id: 53, name: "ریاضی 1", code: "4628165140", unit: 3, category: "402" },
+        { id: 54, name: "ریاضی 2", code: "4628129685", unit: 3, category: "402" },
+        { id: 55, name: "فیزیک 1", code: "4628141460", unit: 3, category: "402" },
+        { id: 56, name: "فیزیک 2", code: "4628141492", unit: 3, category: "402" },
+        { id: 57, name: "معادلات دیفرانسیل", code: "4628150360", unit: 3, category: "402" },
+
+        // --- دروس ۴۰۳ به بعد ---
+        { id: 58, name: "مبانی کامپیوتر", code: "7000031535", unit: 3, category: "403" },
+        { id: 59, name: "کارگاه کامپیوتر", code: "7000031553", unit: 1, category: "403" },
+        { id: 60, name: "ریاضیات گسسته", code: "7000031536", unit: 3, category: "403" },
+        { id: 61, name: "مدار منطقی", code: "7000031537", unit: 3, category: "403" },
+        { id: 62, name: "آز مدار منطقی", code: "7000031554", unit: 1, category: "403" },
+        { id: 63, name: "برنامه سازی پیشرفته", code: "7000031538", unit: 3, category: "403" },
+        { id: 64, name: "زبان تخصصی", code: "7000031552", unit: 2, category: "403" },
+        { id: 65, name: "مدار الکتریکی", code: "7000031539", unit: 3, category: "403" },
+        { id: 66, name: "آز مدار الکتریکی", code: "7000031555", unit: 1, category: "403" },
+        { id: 67, name: "داده ساختار و الگوریتم‌", code: "7000031540", unit: 3, category: "403" },
+        { id: 68, name: "معماری کامپیوتر", code: "7000031541", unit: 3, category: "403" },
+        { id: 69, name: "آز معماری", code: "7000031556", unit: 1, category: "403" },
+        { id: 70, name: "سیستم های دیجیتال", code: "7000031542", unit: 3, category: "403" },
+        { id: 71, name: "نظریه زبان", code: "7000031543", unit: 3, category: "403" },
+        { id: 72, name: "جبر خطی", code: "7000031544", unit: 3, category: "403" },
+        { id: 73, name: "هوش مصنوعی", code: "7000031545", unit: 3, category: "403" },
+        { id: 74, name: "سیستم‌ نهفته بی درنگ", code: "7000031546", unit: 3, category: "403" },
+        { id: 75, name: "سیستم های عامل", code: "7000031547", unit: 3, category: "403" },
+        { id: 76, name: "آز سیستم عامل", code: "7000031557", unit: 1, category: "403" },
+        { id: 77, name: "روش پژوهش و ارائه", code: "7000031548", unit: 2, category: "403" },
+        { id: 78, name: "تحلیل طراحی", code: "7000031549", unit: 3, category: "403" },
+        { id: 79, name: "شبکه‌ های کامپیوتری", code: "7000031550", unit: 3, category: "403" },
+        { id: 80, name: "آز شبکه‌", code: "7000031558", unit: 1, category: "403" },
+        { id: 81, name: "امنيت سیستم‌", code: "7000031551", unit: 3, category: "403" },
+        { id: 82, name: "طراحی الگوریتم", code: "7000031559", unit: 3, category: "403" },
+        { id: 83, name: "سیگنالها و سیستم ها", code: "7000031560", unit: 3, category: "403" },
+        { id: 84, name: "پایگاه داده", code: "7000031561", unit: 3, category: "403" },
+        { id: 85, name: "طراحی زبان", code: "7000031562", unit: 3, category: "403" },
+        { id: 86, name: "بازیابی اطلاعات", code: "7000031563", unit: 3, category: "403" },
+        { id: 87, name: "رایانش چند هسته‌ای", code: "7000031564", unit: 3, category: "403" },
+        { id: 88, name: "داده کاوی", code: "7000031565", unit: 3, category: "403" },
+        { id: 89, name: "محاسبات عددی", code: "7000031566", unit: 3, category: "403" },
+        { id: 90, name: "مهندسی نرم افزار", code: "7000031567", unit: 3, category: "403" },
+        { id: 91, name: "طراحی کامپایلرها", code: "7000031568", unit: 3, category: "403" },
+        { id: 92, name: "شبیه سازی", code: "7000031569", unit: 3, category: "403" },
+        { id: 93, name: "طراحی مدار", code: "7000031570", unit: 3, category: "403" },
+        { id: 94, name: "مدیریت پروژه", code: "7000031588", unit: 3, category: "403" },
+        { id: 95, name: "طراحی در سطح سیستم", code:"7000031572", unit: 3, category: "403" },
+        { id: 96, name: "آز فیزیک 2", code: "7000031533", unit: 3, category: "403" },
+        { id: 97, name: "آمار احتمالات مهندسی", code: "7000031530", unit: 3, category: "403" },
+        { id: 98, name: "ریاضی 1", code: "7000031527", unit: 3, category: "403" },
+        { id: 99, name: "ریاضی 2", code: "7000031528", unit: 3, category: "403" },
+        { id: 100, name: "فیزیک 1", code: "7000031531", unit: 3, category: "403" },
+        { id: 101, name: "فیزیک 2", code: "7000031532", unit: 3, category: "403" },
+        { id: 102, name: "معادلات دیفرانسیل", code: "7000031529", unit: 3, category: "403" },
+        { id: 103, name: "گرافیک کامپیوتری", code: "7000031573", unit: 3, category: "403" },
+        { id: 104, name: "سیستم های چند رسانه‌ای", code: "7000031574", unit: 3, category: "403" },
+        { id: 105, name: "چابک نرم افزار", code: "7000031575", unit: 3, category: "403" },
+        { id: 106, name: "آزمون نرم افزار", code: "7000031576", unit: 3, category: "403" },
+        { id: 107, name: "هوش محاسباتی", code: "7000031577", unit: 3, category: "403" },
+        { id: 108, name: "مبانی ساخت بازی", code: "7000031578", unit: 3, category: "403" },
+        { id: 109, name: "انتقال داده", code: "7000031579", unit: 3, category: "403" },
+        { id: 110, name: "برنامه سازی وب", code: "7000031580", unit: 3, category: "403" },
+        { id: 111, name: "برنامه سازی موبایل", code: "7000031581", unit: 3, category: "403" },
+        { id: 112, name: "مبانی رایانش ابری", code: "7000031582", unit: 3, category: "403" },
+        { id: 113, name: "مبانی اینترنت اشیا", code: "7000031583", unit: 3, category: "403" },
+        { id: 114, name: "تعامل انسان و کامپیوتر", code: "7000031584", unit: 3, category: "403" },
+        { id: 115, name: "مدار منطقی پیشرفته", code: "7000031585", unit: 3, category: "403" },
+        { id: 116, name: "آداب فناوری اطلاعات", code: "7000031586", unit: 3, category:"403"},
+        { id: 129, name : 'تجارت الکترونیک', code : '7000031587', unit : 3, category : '403' },
+        { id: 118, name: "مدیریت و برنامه ریزی راهبردی فناوری اطالاعات", code: "7000031588", unit: 3, category: "403" },
+        { id: 119, name: "اندازه گیری و کنترل کامپیوتری", code: "7000031589", unit: 3, category: "403" },
+        { id: 120, name: "زبان های توصیف سخت افزار", code: "7000031590", unit: 3, category: "403" },
+        { id: 121, name: "نظریه محاسبات", code: "7000031591", unit: 3, category: "403" },
+        { id: 122, name: "مبانی نظریه بازی", code: "7000031592", unit: 3, category: "403" },
+        { id: 123, name: "مبانی رمزنگاری", code: "7000031593", unit: 3, category: "403" },
+        { id: 124, name: "سیستم کنترل خطی", code: "7000031594", unit: 3, category: "403" },
+        { id: 125, name: "مقدمه رباتیک", code: "7000031595", unit: 3, category: "403" },
+        { id: 126, name: "مقدمه بیوانفورماتیک", code: "7000031596", unit: 3, category: "403" },
+        { id: 127, name: "کارآفرینی", code: "7000031597", unit: 3, category: "403" },
+        { id: 128, name: "آزمایشگاه مهندسی نرم افزار", code: "7000031637", unit: 1, category: "403" },
+        { id: 129, name: "آز سخت افزار", code: "7000031638", unit: 1, category: "403" },
+        { id: 130, name: "آزمایشگاه مدارهای مجتمع پرتراکم", code: "7000031639", unit: 1, category: "403" },
+        { id: 131, name: "آزمایشگاه کنترل کامپیوتری", code: "7000031640", unit: 1, category: "403" },
+        { id: 132, name: "کارگاه رباتیک", code: "7000031641", unit: 1, category: "403" },
+        { id: 133, name: "کارگاه ساخت بازی", code: "7000031642", unit: 1, category: "403" },
+        { id: 134, name: "مفاهیم پیشرفته", code: "7000031598", unit: 3, category: "403" },
+        { id: 135, name: "مفاهیم پیشرفته 2", code: "7000031598", unit: 3, category: "403" },
+        { id: 136, name: "آشنایی با صنعت", code: "7000035094", unit: 1, category: "403" },
+        { id: 137, name: "مهارت نرم", code: "7000035095", unit: 2, category: "403" },
+        { id: 138, name: "کارآموزی", code: "7000035096", unit: 2, category: "403" },
+
+        // --- دروس مشترک و عمومی 403 ---
+        { id: 139, name: "ریاضیات پایه", code: "55001", unit: 2, category: "403" },
+        { id: 140, name: "آمار احتمالات", code: "55005", unit: 2, category: "403" },
+        { id: 141, name: "زبان پایه", code: "99093", unit: 2, category: "403" },
+        { id: 142, name: "تربیت بدنی", code: "99079", unit: 2, category: "403" },
+        { id: 143, name: "ورزش 1", code: "99062", unit: 2, category: "403" },
+        { id: 144, name: "دانش خانواده و جمعیت", code: "90128", unit: 2, category: "403" },
+        { id: 145, name: "زبان فارسی", code: "90029", unit: 3, category: "403" },
+        { id: 146, name: "تاریخ فرهنگ و تمدن اسلامی", code: "92381", unit: 2, category: "403" },
+        { id: 147, name: "وصیت نامه امام", code: "99073", unit: 2, category: "403" },
+        { id: 148, name: "انس با قرآن", code: "99083", unit: 2, category: "403" },
+        { id: 149, name: "اندیشه 1", code: "90610", unit: 2, category: "403" },
+        { id: 150, name: "اندیشه 2", code: "98841", unit: 2, category: "403" },
+        { id: 151, name: "انسان در اسلام", code: "90613", unit: 2, category: "403" },
+        { id: 152, name: "حقوق اجتماعی و سیاسی", code: "90063", unit: 2, category: "403" },
+        { id: 153, name: "فلسفه اخلاق", code: "98982", unit: 2, category: "403" },
+        { id: 154, name: "اخلاق اسلامی", code: "98961", unit: 2, category: "403" },
+        { id: 155, name: "آیین زندگی", code: "98923", unit: 2, category: "403" },
+        { id: 156, name: "عرفان عملی اسلامی", code: "98949", unit: 2, category: "403" },
+        { id: 157, name: "انقلاب اسلامی", code: "90755", unit: 2, category: "403" },
+        { id: 158, name: "آشنایی با قانون اساسی", code: "90046", unit: 2, category: "403" },
+        { id: 159, name: "اندیشه سیاسی", code: "90064", unit: 2, category: "403" },
+        { id: 160, name: "تاریخ تحلیلی صدر اسلام", code: "99041", unit: 2, category: "403" },
+        { id: 161, name: "تاریخ امامت", code: "90121", unit: 2, category: "403" },
+        { id: 162, name: "تفسیر موضوعی قرآن", code: "90763", unit: 2, category: "403" },
+        { id: 163, name: "تفسیر موضوعی نهج البلاغه", code: "90313", unit: 2, category: "403" },
+        { id: 164, name: "دفاع مقدس", code: "90881", unit: 2, category:"403" },
+        { id: 165, name: "زبان انگلیسی ترکیبی 1", code: "99090", unit: 1, category: "403" },
+        { id: 166, name: "زبان انگلیسی ترکیبی 2", code: "99091", unit: 1, category: "403" },
+        { id: 167, name: "زبان انگلیسی ترکیبی 3", code: "99092", unit: 1, category: "403" },
+
+        // --- دروس مشترک و عمومی 402 ---
+        { id: 168, name: "ریاضیات پایه", code: "55001", unit: 2, category: "402" },
+        { id: 169, name: "آمار احتمالات", code: "55005", unit: 2, category: "402" },
+        { id: 170, name: "زبان پایه", code: "99093", unit: 2, category: "402" },
+        { id: 171, name: "تربیت بدنی", code: "99079", unit: 2, category: "402" },
+        { id: 172, name: "ورزش 1", code: "99062", unit: 2, category: "402" },
+        { id: 173, name: "دانش خانواده و جمعیت", code: "90128", unit: 2, category: "402" },
+        { id: 174, name: "زبان فارسی", code: "90029", unit: 3, category: "402" },
+        { id: 175, name: "تاریخ فرهنگ و تمدن اسلامی", code: "92381", unit: 2, category: "402" },
+        { id: 176, name: "وصیت نامه امام", code: "99073", unit: 2, category: "402" },
+        { id: 177, name: "انس با قرآن", code: "99083", unit: 2, category: "402" },
+        { id: 178, name: "اندیشه 1", code: "90610", unit: 2, category: "402" },
+        { id: 179, name: "اندیشه 2", code: "98841", unit: 2, category: "402" },
+        { id: 180, name: "انسان در اسلام", code: "90613", unit: 2, category: "402" },
+        { id: 181, name: "حقوق اجتماعی و سیاسی", code: "90063", unit: 2, category: "402" },
+        { id: 182, name: "فلسفه اخلاق", code: "98982", unit: 2, category: "402" },
+        { id: 183, name: "اخلاق اسلامی", code: "98961", unit: 2, category: "402" },
+        { id: 184, name: "آیین زندگی", code: "98923", unit: 2, category: "402" },
+        { id: 185, name: "عرفان عملی اسلامی", code: "98949", unit: 2, category: "402" },
+        { id: 186, name: "انقلاب اسلامی", code: "90755", unit: 2, category:"402" },
+        { id: 187, name: "آشنایی با قانون اساسی", code: "90046", unit: 2, category:"402" },
+        { id: 188, name: "اندیشه سیاسی", code: "90064", unit: 2, category:"402" },
+        { id: 189, name: "تاریخ تحلیلی صدر اسلام", code:"99041", unit : 2 ,category:"402"},
+        { id: 190, name : "تاریخ امامت" ,code : "90121" ,unit : 2 ,category : "402"},
+        { id: 191, name: "تفسیر موضوعی قرآن", code: "90763", unit: 2, category: "402" },
+        { id: 192, name: "تفسیر موضوعی نهج البلاغه", code: "90313", unit: 2, category: "402" },
+        { id: 193, name: "دفاع مقدس", code: "90881", unit: 2, category: "402" },
+        { id: 194, name: "زبان انگلیسی ترکیبی 1", code: "99090", unit: 1, category:"402" },
+        { id: 195, name: "زبان انگلیسی ترکیبی 2", code: "99091", unit: 1, category:"402" },
+        { id: 196, name: "زبان انگلیسی ترکیبی 3", code: "99092", unit: 1, category:"402" }
+    ];
+
+    let favorites = JSON.parse(localStorage.getItem('fav_codes')) || [];
+    let currentCategory = '403';
+
+    let showOnlyFavs = false; // وضعیت نمایش فقط علاقه‌مندی‌ها
+
+    function renderCodes(filterText = '') {
+        const container = document.getElementById('codesContainer');
+        container.innerHTML = '';
+
+        // ۱. فیلتر بر اساس دسته و متن جستجو
+        let filtered = allCodes.filter(item => 
+            item.category === currentCategory && 
+            (item.name.includes(filterText) || item.code.includes(filterText))
+        );
+
+        // ۲. اعمال فیلتر فقط علاقه‌مندی‌ها
+        if (showOnlyFavs) {
+            filtered = filtered.filter(item => favorites.includes(item.id));
+        }
+
+        // ۳. منطق مرتب‌سازی
+        const sortBy = document.getElementById('sortSelect').value;
+        if (sortBy === 'name') {
+            filtered.sort((a, b) => a.name.localeCompare(b.name, 'fa'));
+        } else if (sortBy === 'code') {
+            filtered.sort((a, b) => a.code.localeCompare(b.code));
+        }
+
+        // ۴. نمایش پیام در صورت خالی بودن لیست
+        if (filtered.length === 0) {
+            container.innerHTML = '<p class="text-center text-gray-400 mt-10">درسی پیدا نشد!</p>';
+        }
+
+        // ۵. ساخت کارت‌های دروس
+        filtered.forEach(item => {
+            const isFav = favorites.includes(item.id);
+            const card = document.createElement('div');
+            card.className = "bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center transition-all hover:shadow-md";
+            card.innerHTML = `
+                <div class="flex-1 cursor-pointer" onclick="copyToClipboard('${item.code}')">
+                    <h3 class="font-bold text-gray-800">${item.name}</h3>
+                    <p class="text-sm text-blue-500 font-mono mt-1">${item.code} <span class="text-gray-400 text-xs">(کپی)</span></p>
+                    <span class="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">${item.unit > 0 ? item.unit + ' واحد' : 'واحد نامشخص'}</span>
+                </div>
+                <button onclick="toggleFavorite(${item.id})" class="mr-4 text-2xl transition-transform active:scale-150">
+                    ${isFav ? '⭐' : '☆'}
+                </button>
+            `;
+            container.appendChild(card);
+        });
+        updateStats();
+    }
+
+    // قابلیت کپی در کلیپ‌بورد
+    function copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => showToast());
+        } else {
+            let textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showToast();
+        }
+    }
+
+    // مدیریت علاقه‌مندی‌ها
+    function toggleFavorite(id) {
+        const index = favorites.indexOf(id);
+        if (index > -1) favorites.splice(index, 1);
+        else favorites.push(id);
+        
+        localStorage.setItem('fav_codes', JSON.stringify(favorites));
+        renderCodes(document.getElementById('searchInput').value);
+    }
+
+    // سوئیچ فیلتر ستاره‌دارها
+    function toggleShowOnlyFavs() {
+        showOnlyFavs = !showOnlyFavs;
+        const btn = document.getElementById('favFilterBtn');
+        if (showOnlyFavs) {
+            btn.classList.add('bg-yellow-100', 'border-yellow-400');
+        } else {
+            btn.classList.remove('bg-yellow-100', 'border-yellow-400');
+        }
+        renderCodes(document.getElementById('searchInput').value);
+    }
+
+    function updateStats() {
+        const footer = document.getElementById('footerStats');
+        const totalElement = document.getElementById('totalCredits');
+        
+        const favItems = allCodes.filter(item => favorites.includes(item.id));
+        const totalUnits = favItems.reduce((sum, item) => sum + item.unit, 0);
+
+        if (favorites.length > 0) {
+            footer.classList.remove('hidden');
+            totalElement.innerText = totalUnits;
+        } else {
+            footer.classList.add('hidden');
+        }
+    }
+
+    // جستجو و فیلتر دسته
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        renderCodes(e.target.value);
+    });
+
+    function filterCategory(cat) {
+        currentCategory = cat;
+        const btn403 = document.getElementById('btn-403');
+        const btn402 = document.getElementById('btn-402');
+
+        const inactiveClass = "flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-medium shadow-md transition-all";
+        const activeClass = "flex-1 bg-blue-600 text-white py-3 rounded-xl font-medium shadow-md transition-all";
+
+        btn403.className = inactiveClass;
+        btn402.className = inactiveClass;
+
+        if (cat === '403') btn403.className = activeClass;
+        else if (cat === '402') btn402.className = activeClass;
+
+        renderCodes(document.getElementById('searchInput').value);
+    }
+
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.style.opacity = '1';
+        setTimeout(() => toast.style.opacity = '0', 1500);
+    }
+
+    function shareFavorites() {
+        const favItems = allCodes.filter(item => favorites.includes(item.id));
+        if (favItems.length === 0) {
+            alert("ابتدا چند درس را به علاقه‌مندی‌ها اضافه کنید.");
+            return;
+        }
+
+        let text = "📚 لیست دروس انتخابی من:\n\n";
+        let totalUnits = 0;
+
+        favItems.forEach((item, index) => {
+            text += `${index + 1}. ${item.name}\n🔹 کد: ${item.code}\n🔸 واحد: ${item.unit}\n\n`;
+            totalUnits += item.unit;
+        });
+
+        text += `✅ مجموع واحدها: ${totalUnits}\n📍 ساخته شده در سامانه انتخاب واحد`;
+
+        if (navigator.share) {
+            navigator.share({ title: 'لیست دروس من', text: text }).catch(console.error);
+        } else {
+            copyToClipboard(text);
+            alert("متن لیست برای اشتراک‌گذاری کپی شد!");
+        }
+    }
+
+    // اجرای اولیه
+    renderCodes();
+</script>
+</body>
+</html>
