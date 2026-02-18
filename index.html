@@ -3,7 +3,8 @@
 <head>
     <link href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARAAAAAAEQABEBERAAAQEAEQEAAAABAQARAREQAAEBABEBAAAAARAAEQEREAAAAAARAAAAARERERERERERERERERERERAAAAARAAAAAAARABEAERAAAQAAEQEAAQABAAARAQABAAEAABEBAAEAABEAEQAREAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" rel="icon" type="image/x-icon">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1024">
+    <!-- <meta name="viewport" content="width=1024"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>کدهای دروس | آزاد شیراز</title>
@@ -291,6 +292,71 @@
             scroll-margin-top: 290px;
         }
 
+        .max-h-64::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .max-h-64::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.3);
+            border-radius: 10px;
+        }
+
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none;
+        }
+
+        .group:hover .group-hover\:rotate-180 {
+            transform: rotate(180deg);
+        }
+
+        .group:hover .group-hover\:opacity-100 {
+            opacity: 1;
+        }
+
+        .group:hover .group-hover\:visible {
+            visibility: visible;
+        }
+
+        .max-h-60::-webkit-scrollbar {
+            width: 5px;
+        }
+        .max-h-60::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.3);
+            border-radius: 10px;
+        }
+
+        #searchSticky {
+            position: sticky;
+            top: 70px;
+            z-index: 40;
+        }
+
+        .group > div {
+            z-index: 50;
+            position: absolute;
+        }
+
+        @media (max-width: 640px) {
+            .group > div {
+                max-height: 50vh;
+                overflow-y: auto;
+            }
+        }
+
+        #toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        body, .bg-white, .text-gray-800 {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
     </style>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -338,8 +404,8 @@
 
     <main id="mainContent" class="max-w-5xl mx-auto mt-40 px-4">
         
-        <div id="searchSticky" class="sticky top-0 z-40 bg-white/70 dark:bg-gray-800/70 p-2 rounded-xl mb-6 glass-header border border-white/50 dark:border-gray-700/50 backdrop-blur-md transition-all duration-300">
-            <div class="flex gap-2">
+        <div id="searchSticky" class="sticky top-0 z-40 bg-white/70 dark:bg-gray-800/70 p-3 rounded-xl mb-6 glass-header border border-white/50 dark:border-gray-700/50 backdrop-blur-md transition-all duration-300">
+            <div class="flex gap-2 mb-3">
                 <input type="text" id="searchInput" 
                     placeholder="جستجوی نام درس یا کد..." 
                     class="flex-1 p-3 rounded-lg border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-500 outline-none transition-all shadow-sm text-base">
@@ -350,52 +416,51 @@
                 </button>
             </div>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4" id="categoryButtons">
-                <button onclick="filterCategory('CE403')" title="چارت مهندسی کامپیوتر ۴۰۳ به بعد" 
-                    class="cat-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2.5 rounded-lg text-sm font-medium shadow-md transition-all" data-cat="CE403" style="--animation-delay: 1">
-                    CE 403
-                </button>
 
-                <button onclick="filterCategory('CE402')" title="چارت مهندسی کامپیوتر ۴۰۲ به قبل" 
-                    class="cat-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2.5 rounded-lg text-sm font-medium shadow-md transition-all" data-cat="CE402" style="--animation-delay: 2">
-                    CE 402
-                </button>
+            <div class="grid grid-cols-2 gap-2">
+                
+                <div class="relative">
+                    <select id="sortSelect" onchange="renderCodes(document.getElementById('searchInput').value)" 
+                        class="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm bg-white outline-none text-gray-600 dark:text-gray-300 appearance-none cursor-pointer">
+                        <option value="default">ترتیب پیش‌فرض</option>
+                        <option value="name">🔤 مرتب‌سازی بر اساس نام درس</option>
+                        <option value="code">🔢 مرتب‌سازی بر اساس کد درس</option>
+                    </select>
+                    <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
 
-                <button onclick="filterCategory('IE03')" title="چارت مهندسی صنایع ۴۰۳ به بعد" 
-                    class="cat-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2.5 rounded-lg text-sm font-medium shadow-md transition-all" data-cat="IE03" style="--animation-delay: 3">
-                    IE 03
-                </button>
+                <div class="relative group">
+                    <button id="categoryBtn" class="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 text-sm text-right flex items-center justify-between cursor-pointer">
+                        <span id="categoryLabel">📚 انتخاب رشته</span>
+                        <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    
+                    <div class="absolute right-0 left-0 top-full mt-1 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 max-h-60 overflow-y-auto">
+                        <div onclick="selectCategory('CE403', '💻 CE 03')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">💻 مهندسی کامپیوتر ۴۰۳ به بعد</div>
+                        <div onclick="selectCategory('CE402', '💻 CE 02')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">💻 مهندسی کامپیوتر ۴۰۲ به قبل</div>
+                        <div onclick="selectCategory('IE03', '🏭 IE 03')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">🏭 مهندسی صنایع ۰۳ به بعد</div>
+                        <div onclick="selectCategory('Accounting00', '📊 Accounting 00')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">📊 حسابداری 1400 به بعد</div>
+                        <div onclick="selectCategory('CS', '🖥️ CS')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">🖥️ علوم کامپیوتر - آخرین آپدیت چارت</div>
+                        <div onclick="selectCategory('Psy03', '🧠 Psy 03')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200 border-b border-gray-100 dark:border-gray-700">🧠 روانشناسی ۰۳ به قبل</div>
+                        <div onclick="selectCategory('Psy04', '🧠 Psy 04')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">🧠 روانشناسی ۰۴ به بعد</div>
+                        <div onclick="selectCategory('BME', '⚕️ Biomedical Engineering')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">⚕️ مهندسی پزشکی</div>
+                        <div onclick="selectCategory('Graphic', '🎨 Graphic')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">🎨 گرافیک</div>
+                        <div onclick="selectCategory('Microbiology02', '🔬 Microbiology 02')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">🔬 میکروبیولوژی 402</div>
+                        <div onclick="selectCategory('Microbiology03', '🔬 Microbiology 03')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">🔬 میکروبیولوژی 403</div>
+                        <div onclick="selectCategory('ELT00', '📚✍🏻 English Language Teaching')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">📚✍🏻 آموزش زبان انگلیسی 1400 به بعد</div>
+                        <div onclick="selectCategory('ChemicalEng03', '🧪 Chemical Engineering 03')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">🧪 مهندسی شیمی 403 به بعد</div>
+                        <div onclick="selectCategory('Law', '⚖️ Law')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">⚖️ حقوق</div>
+                        <div onclick="selectCategory('MechanicalEng', '⚙️ Mechanical Engineering')" class="px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 cursor-pointer text-sm text-gray-700 dark:text-gray-200">⚙️ مهندسی مکانیک</div>
 
-                <button onclick="filterCategory('Accounting00')" title="حسابداری ۱۴۰۰ به بعد" 
-                    class="cat-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2.5 rounded-lg text-sm font-medium shadow-md transition-all" data-cat="Accounting00" style="--animation-delay: 4">
-                    Accounting
-                </button>
-
-                <button onclick="filterCategory('CS')" title="درس‌های علوم کامپیوتر " 
-                    class="cat-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2.5 rounded-lg text-sm font-medium shadow-md transition-all" data-cat="CS" style="--animation-delay: 5">
-                    CS
-                </button>
-
-                <button onclick="filterCategory('Psy03')" title="درس‌های ۴۰۳ به قبل روانشناسی" 
-                    class="cat-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2.5 rounded-lg text-sm font-medium shadow-md transition-all" data-cat="Psy03" style="--animation-delay: 6">
-                    Psychology 03
-                </button>
-
-                <button onclick="filterCategory('Psy04')" title="درس‌های روانشناسی ۴۰۴ به بعد" 
-                    class="cat-btn bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 py-2.5 rounded-lg text-sm font-medium shadow-md transition-all" data-cat="Psy04" style="--animation-delay: 7">
-                    Psychology 04
-                </button>
-            </div>
-
-            <div class="mt-3">
-                <select id="sortSelect" onchange="renderCodes(document.getElementById('searchInput').value)" 
-                    class="w-full p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 text-sm bg-white outline-none text-gray-600 dark:text-gray-300">
-                    <option value="default"> ترتیب پیش‌فرض</option>
-                    <option value="name">🔤 مرتب‌سازی بر اساس نام درس</option>
-                    <option value="code">🔢 مرتب‌سازی بر اساس کد درس</option>
-                </select>
+                        <!-- Reshte jadid inja ezafe shavad -->
+                    </div>
+                </div>
+                
             </div>
         </div>
+
 
         <div id="codesContainer" class="space-y-3">
             <p class="text-center text-gray-400 dark:text-gray-300 mt-10">در حال بارگذاری لیست دروس...</p>
@@ -609,38 +674,6 @@
         { id: 167, name: "زبان انگلیسی ترکیبی 3", code: "99092", unit: 1, category: "general" },
 
 
-        // // --- دروس مشترک و عمومی 402 ---
-        // { id: 168, name: "ریاضیات پایه", code: "55001", unit: 2, category: "402" },
-        // { id: 169, name: "آمار احتمالات", code: "55005", unit: 2, category: "402" },
-        // { id: 170, name: "زبان پایه", code: "99093", unit: 2, category: "402" },
-        // { id: 171, name: "تربیت بدنی", code: "99079", unit: 1, category: "402" },
-        // { id: 172, name: "ورزش 1", code: "99062", unit: 1, category: "402" },
-        // { id: 173, name: "دانش خانواده و جمعیت", code: "90128", unit: 2, category: "402" },
-        // { id: 174, name: "زبان فارسی", code: "90029", unit: 3, category: "402" },
-        // { id: 175, name: "تاریخ فرهنگ و تمدن اسلامی", code: "92381", unit: 2, category: "402" },
-        // { id: 176, name: "وصیت نامه امام", code: "99073", unit: 1, category: "402" },
-        // { id: 177, name: "انس با قرآن", code: "99083", unit: 1, category: "402" },
-        // { id: 178, name: "اندیشه 1", code: "90610", unit: 2, category: "402" },
-        // { id: 179, name: "اندیشه 2", code: "98841", unit: 2, category: "402" },
-        // { id: 180, name: "انسان در اسلام", code: "90613", unit: 2, category: "402" },
-        // { id: 181, name: "حقوق اجتماعی و سیاسی", code: "90063", unit: 2, category: "402" },
-        // { id: 182, name: "فلسفه اخلاق", code: "98982", unit: 2, category: "402" },
-        // { id: 183, name: "اخلاق اسلامی", code: "98961", unit: 2, category: "402" },
-        // { id: 184, name: "آیین زندگی", code: "98923", unit: 2, category: "402" },
-        // { id: 185, name: "عرفان عملی اسلامی", code: "98949", unit: 2, category: "402" },
-        // { id: 186, name: "انقلاب اسلامی", code: "90755", unit: 2, category:"402" },
-        // { id: 187, name: "آشنایی با قانون اساسی", code: "90046", unit: 2, category:"402" },
-        // { id: 188, name: "اندیشه سیاسی", code: "90064", unit: 2, category:"402" },
-        // { id: 189, name: "تاریخ تحلیلی صدر اسلام", code:"99041", unit : 2 ,category:"402"},
-        // { id: 190, name : "تاریخ امامت" ,code : "90121" ,unit : 2 ,category : "402"},
-        // { id: 191, name: "تفسیر موضوعی قرآن", code: "90763", unit: 2, category: "402" },
-        // { id: 192, name: "تفسیر موضوعی نهج البلاغه", code: "90313", unit: 2, category: "402" },
-        // { id: 193, name: "دفاع مقدس", code: "90881", unit: 2, category: "402" },
-        // { id: 194, name: "زبان انگلیسی ترکیبی 1", code: "99090", unit: 1, category:"402" },
-        // { id: 195, name: "زبان انگلیسی ترکیبی 2", code: "99091", unit: 1, category:"402" },
-        // { id: 196, name: "زبان انگلیسی ترکیبی 3", code: "99092", unit: 1, category:"402" },
-
-
         // ---  IE دروس 403 به بعد رشته صنایع ---
         {id: 197, name: "برنامه ریزی نگهداری و تعمیرات", code: "7000034580", unit: 3, category:"IE03"},
         { id: 198, name: "برنامه ریزی سیستم های تولید", code: "7000034563", unit: 3, category:"IE03" },
@@ -768,29 +801,6 @@
         // ---درس های تمرکزی تخصصی اختیاری (12 واحد)---
         { id: 310, name: "مبانی داده کاوی", code: "6117207459", unit: 3, category:"CS" },
         { id: 310, name: "سیستم اطلاعات مدیریت", code: "6117167712", unit: 3, category:"CS" },
-        // // ---درس های عمومی (26 واحد)---
-        // { id: 311, name: "تربیت بدنی", code: "99079", unit: 1, category:"CS" },
-        // { id: 312, name: "ورزش 1", code: "99062", unit: 1, category:"CS" },
-        // { id: 313, name: "دانش خانواده و جمعیت", code: "90128", unit: 2, category:"CS" },
-        // { id: 313, name: "زبان انگلیسی و ترکیبی 1", code: "99090", unit: 1, category:"CS" },
-        // { id: 314, name: "زبان فارسی", code: "90029", unit: 3, category:"" },
-        // { id: 315, name: "", code: "", unit: 3, category:"" },
-        // { id: 316, name: "تاریخ فرهنگ و تمدن اسلام و ایران", code: "92381", unit: 2, category:"" },
-        // { id: 317, name: "اندیشه ها و وصایای امام خمینی", code: "99073", unit: 1, category:"" },
-        // { id: 318, name: "انس با قران", code: "99083", unit: 1, category:"" },
-        // { id: 319, name: "اندیشه 1", code: "90610", unit: 2, category:"" },
-        // { id: 320, name: "اندیشه 2", code: "98841", unit: 2, category:"" },
-        // { id: 321, name: "انسان در اسلام", code: "90613", unit: 2, category:"" },
-        // { id: 322, name: "حقوق اجتماعی و سیاسی", code: "90063", unit: 2, category:"" },
-        // { id: 323, name: "فلسفه اخلاق", code: "98982", unit: 2, category:"" },
-        // { id: 324, name: "آیین زندگی", code: "98923", unit: 2, category:"" },
-        // { id: 325, name: "عرفان عملی اسلامی", code: "98949", unit: 2, category:"" },
-        // { id: 326, name: "انقلاب اسلامی", code: "90755", unit: 2, category:"" },
-        // { id: 327, name: "آشنایی با قانون اساسی جمهوری اسلامی ایران", code: "90046", unit: 2, category:"" },
-        // { id: 328, name: "تاریخ تحلیلی صدر اسلام", code: "99041", unit: 2, category:"" },
-        // { id: 329, name: "تاریخ امامت", code: "90121", unit: 2, category:"" },
-        // { id: 330, name: "تفسیر موضوعی قرآن", code: "90763", unit: 2, category:"" },
-        // { id: 331, name: "تفسیر موضوعی نهج البلاغه", code: "90313", unit: 3, category:"" },
 
         // ---درس های اختیاری (30 واحد)---
         { id: 332, name: "طراحی هندسی کامپیوتری", code: "6117137973", unit: 3, category:"CS" },
@@ -802,7 +812,7 @@
         { id: 338, name: "بهینه سازی ترکیبیاتی", code: "6117205775", unit: 3, category:"CS" },
         { id: 339, name: "مبانی انالیز ریاضی", code: "6114144407", unit: 3, category:"CS" },
         { id: 340, name: "مبانی جبر", code: "6117144838", unit: 3, category:"CS" },
-        { id: 341, name: "نظریه کد گذاری", code: "6117154098", unit: 3, category:"" },
+        { id: 341, name: "نظریه کد گذاری", code: "6117154098", unit: 3, category:"CS" },
         { id: 342, name: "زبانهای برنامه سازی", code: "6033151453", unit: 3, category:"CS" },
         { id: 343, name: "گرافیک کامپیوتری", code: "6117142462", unit: 3, category:"CS" },
         { id: 344, name: "منطق", code: "6117151335", unit: 3, category:"CS" },
@@ -834,7 +844,7 @@
         { id: 365, name: "آمار توصیفی", code: "5966107743", unit: 2, category:"Psy03" },
         { id: 366, name: "فیزیولوژی اعصاب و غدد", code: "5966141044", unit: 2, category:"Psy03" },
         { id: 367, name: "معرفت‌شناسی", code: "5966150462", unit: 2, category:"Psy03" },
-        { id: 368, name: "روان‌شناسی پیش‌دانشگاهی", code: " 55011", unit: 2, category:"Psy03" },
+        { id: 368, name: "روان‌شناسی پیش‌دانشگاهی", code: "55011", unit: 2, category:"Psy03" },
         { id: 369, name: "آمار استنباطی", code: "5966107683", unit: 3, category:"Psy03" },
         { id: 370, name: "زبان انگلیسی پیش‌ دانشگاهی", code: "99093", unit: 2, category:"Psy03" },
         { id: 371, name: "مباحث اساسی در روان‌ شناسی (2) ", code: " 5966143376", unit: 2, category:"Psy03" },
@@ -913,13 +923,13 @@
         { id: 440, name: "فیزیولوژی اعصاب و غدد", code: "7000037336", unit: 2, category:"Psy04" },
         { id: 441, name: "معرفت‌شناسی", code: "7000037441", unit: 2, category:"Psy04" },
         { id: 442, name: "روان‌شناسی اجتماعی", code: "7000037343", unit: 2, category:"Psy04" },
-        { id: 443, name: "روان‌شناسی پیش‌دانشگاهی", code: "55011", unit: 2, category:"Psy04" },
+        { id: 443, name: "روان‌شناسی پیش‌ دانشگاهی", code: "55011", unit: 2, category:"Psy04" },
         { id: 444, name: "زبان انگلیسی پیش‌دانشگاهی", code: "99093", unit: 2, category:"Psy04" },
         { id: 445, name: "روان‌شناسی عمومی (2)", code: "7000037331", unit: 2, category:"Psy04" },
         { id: 446, name: "آمار استنباطی", code: "7000037334", unit: 3, category:"Psy04" },
         { id: 447, name: "احساس و ادراک", code: "7000037337", unit: 2, category:"Psy04" },
         { id: 448, name: "روان‌شناسی از دیدگاه اندیشمندان مسلمان", code: "7000037344", unit: 2, category:"Psy04" },
-        { id: 449, name: "نگرش و تغییر آن", code: "7000037442", unit: 2, category:"" },
+        { id: 449, name: "نگرش و تغییر آن", code: "7000037442", unit: 2, category:"Psy04" },
         { id: 450, name: "روان‌شناسی فیزیولوژیک", code: "7000037338", unit: 2, category:"Psy04" },
         { id: 451, name: "روش تحقیق (کمی و کیفی)", code: "7000037335", unit: 3, category:"Psy04" },
         { id: 452, name: "روان‌شناسی تحولی (1)", code: "7000037340", unit: 2, category:"Psy04" },
@@ -962,35 +972,11 @@
         { id: 489, name: "روان‌شناسی سلامت", code: "7000037430", unit: 2, category:"Psy04" },
         { id: 490, name: "کارآموزی", code: "7000037647", unit: 2, category:"Psy04" },
         { id: 491, name: "پژوهش عملی (انفرادی در روان‌شناسی)", code: "7000037443", unit: 2, category:"Psy04" },
-        // { id: 492, name: "اندیشه اسلامی 1", code: "90610", unit: 2, category:"Psy04" },
-        // { id: 493, name: "انسان در اسلام", code: "90613", unit: 2, category:"Psy04" },
-        // { id: 494, name: "حقوق اجتماعی و سیاسی در اسلام", code: "90063", unit: 2, category:"Psy04" },
-        // { id: 495, name: "اندیشه اسلامی 2", code: "98841", unit: 2, category:"Psy04" },
-        // { id: 496, name: "انس با قرآن کریم", code: "99083", unit: 2, category:"Psy04" },
-        // { id: 497, name: "انقلاب اسلامی ایران", code: "90755", unit: 2, category:"Psy04" },
-        // { id: 498, name: "آشنایی با قانون اساسی جمهوری اسلامی ایران", code: "90046", unit: 2, category:"Psy04" },
-        // { id: 499, name: "اندیشه‌های سیاسی امام خمینی (ره)", code: "90064", unit: 2, category:"Psy04" },
-        // { id: 500, name: "اخلاق اسلامی (مبانی و مفاهیم)", code: "98961", unit: 2, category:"Psy04" },
-        // { id: 501, name: "فلسفه اخلاق", code: "98982", unit: 2, category:"Psy04" },
-        // { id: 502, name: "آیین زندگی (اخلاق کاربردی)", code: "98923", unit: 2, category:"Psy04" },
-        // { id: 503, name: "عرفان عملی اسلامی", code: "98949", unit: 2, category:"Psy04" },
-        // { id: 504, name: "اندیشه‌های امامین انقلاب اسلامی و وصایای امام خمینی", code: "99073", unit: 1, category:"Psy04" },
-        // { id: 505, name: "تاریخ فرهنگ و تمدن اسلام و ایران", code: "92381", unit: 2, category:"Psy04" },
         { id: 506, name: "تاریخ و فرهنگ تمدن اسلامی", code: "90061", unit: 2, category:"Psy04" },
-        // { id: 507, name: "تاریخ تحلیلی صدر اسلام", code: "99041", unit: 2, category:"Psy04" },
-        // { id: 508, name: "تاریخ امامت", code: "90121", unit: 2, category:"Psy04" },
         { id: 509, name: "علوم و معارف دفاع مقدس و مقاومت (کد جدید)", code: "7000035438", unit: 2, category:"Psy04" },
-        // { id: 510, name: "دانش خانواده و جمعیت", code: "90128", unit: 2, category:"Psy04" },
-        // { id: 511, name: "فارسی عمومی", code: "90029", unit: 3, category:"Psy04" },
-        // { id: 512, name: "تربیت بدنی عمومی", code: "99079", unit: 1, category:"Psy04" },
-        // { id: 513, name: "ورزش عمومی", code: "99062", unit: 1, category:"Psy04" },
-        // { id: 514, name: "زبان انگلیسی عمومی-ترکیبی (1)", code: "99090", unit: 1, category:"Psy04" },
-        // { id: 515, name: "زبان انگلیسی عمومی-ترکیبی (2)", code: "99091", unit: 1, category:"Psy04" },
-        // { id: 516, name: "زبان انگلیسی عمومی-ترکیبی (3)", code: "99092", unit: 1, category:"Psy04" },
         { id: 517, name: "روان‌شناسی جنسیت", code: "7000037444", unit: 2, category:"Psy04" },
         { id: 518, name: "آشنایی با فلسفه اسلامی", code: "7000037445", unit: 2, category:"Psy04" },
         { id: 519, name: "مهارت‌های معنوی", code: "7000037446", unit: 2, category:"Psy04" },
-        // { id: 520, name: "علوم اعصاب شناختی", code: "7000037448", unit: 2, category:"Psy04" },
         { id: 521, name: "روان‌شناسی ورزش", code: "7000037449", unit: 2, category:"Psy04" },
         { id: 522, name: "پویایی گروه", code: "7000037450", unit: 2, category:"Psy04" },
         { id: 523, name: "روان‌شناسی کار و مدیریت", code: "7000037621", unit: 2, category:"Psy04" },
@@ -1017,6 +1003,493 @@
         { id: 544, name: "مهارت‌های فرزندپروری و آموزش خانواده", code: "7000037642", unit: 2, category:"Psy04" },
         { id: 545, name: "کارگاه‌های تخصصی روان‌شناسی", code: "7000037643", unit: 2, category:"Psy04" },
         { id: 546, name: "روان‌شناسی سالمندی و مراقبت از سالمندان", code: "7000037644", unit: 2, category:"Psy04" },
+
+
+                // ----مهندسی_پزشکی---
+        { id: 547, name: "فیزیک 2", code: "7000032191", unit: 3, category:"BME" },
+        { id: 548, name: "محاسبات عددی", code: "6156147380", unit: 2, category:"BME" },
+        { id: 549, name: "ریاضیات پایه", code: "55001", unit: 2, category:"BME" },
+        { id: 550, name: "ریاضی عمومی 1", code: "7000032188", unit: 3, category:"BME" },
+        { id: 551, name: "معادلات دیفرانسیل", code: "7000032192", unit: 3, category:"BME" },
+        { id: 552, name: "ریاضی 2", code: "7000032189", unit: 3, category:"BME" },
+        { id: 553, name: "ریاضی 2", code: "6156129685", unit: 3, category:"BME" },
+        { id: 554, name: "فیزیک 2", code: "6156141759", unit: 3, category:"BME" },
+        { id: 555, name: "الکترونیک 2", code: "6156107476", unit: 3, category:"BME" },
+        { id: 556, name: "آزمایشگاه مدار", code: "7000035184", unit: 1, category:"BME" },
+        { id: 557, name: "روش تحقیق و گزارش نویسی فنی", code: "7000032195", unit: 2, category:"BME" },
+        { id: 558, name: "سیگنال ها و سیستم ها", code: "6156135313", unit: 3, category:"BME" },
+        { id: 559, name: "روش تحقیق و گزارش نویسی فنی", code: "6156208040", unit: 3, category:"BME" },
+        { id: 560, name: "مدار منطقی", code: "6156147873", unit: 3, category:"BME" },
+        { id: 561, name: "شیمی آلی", code: "7000032310", unit: 3, category:"BME" },
+        { id: 562, name: "آناتومی", code: "7000032310", unit: 2, category:"BME" },
+        { id: 563, name: "فیزیک 1", code: "7000032190", unit: 3, category:"BME" },
+        { id: 564, name: "فیزیک مکانیک", code: "55002", unit: 3, category:"BME" },
+        { id: 565, name: "آز مدار الکتریکی", code: "6156208036", unit: 1, category:"BME" },
+        { id: 566, name: "الکترونیک 1", code: "6156107472", unit: 3, category:"BME" },
+        { id: 567, name: "استاتیک و مقاومت مصالح", code: "6156103392", unit: 3, category:"BME" },
+        { id: 568, name: "استاتیک و مقاومت مصالح", code: "7000032196", unit: 3, category:"BME" },
+        { id: 569, name: "آز خواص مواد", code: "6156208057", unit: 1, category:"BME" },
+        { id: 570, name: "مکانیک سیالات", code: "6156152366", unit: 3, category:"BME" },
+        { id: 571, name: "ترمودینامیک", code: "7000032270", unit: 3, category:"BME" },
+        { id: 572, name: "ترمودینامیک در سیستم های حیاتی", code: "6156208058", unit: 3, category:"BME" },
+        { id: 573, name: "ریاضیات مهندسی", code: "7000032201", unit: 3, category:"BME" },
+        { id: 574, name: "ریاضیات مهندسی", code: "6156129896", unit: 3, category:"BME" },
+        { id: 575, name: "زبان تخصصی", code: "6156206597", unit: 2, category:"BME" },
+        { id: 576, name: "پدیده های بیوالکتریکی", code: "7000032211", unit: 3, category:"BME" },
+        { id: 577, name: "الکترومغناطیس", code: "7000032221", unit: 3, category:"BME" },
+        { id: 578, name: "پدیده های بیوالکتریکی", code: "6156114127", unit: 3, category:"BME" },
+        { id: 579, name: "الکترومغناطیس", code: "6156107455", unit: 3, category:"BME" },
+        { id: 580, name: "مقدمه ای بر مهندسی زیست پزشکی", code: "7000032207", unit: 3, category:"BME" },
+        { id: 581, name: "مقدمه ای بر مهندسی زیست پزشکی", code: "6156208033", unit: 3, category:"BME" },
+        { id: 582, name: "مواد مهندسی 1: ساختار و خواص", code: "6156208039", unit: 3, category:"BME" },
+        { id: 583, name: "مواد مهندسی 1: ساختار و خواص", code: "7000032208", unit: 3, category:"BME" },
+        { id: 584, name: "1 شیمی کاربردی زیست مواد ها", code: "6156208068", unit: 3, category:"BME" },
+        { id: 585, name: "مدار های الکتریکی 2", code: "7000032223", unit: 3, category:"BME" },
+        { id: 586, name: "مدار های الکتریکی 2", code: "6156147782", unit: 3, category:"BME" },
+        { id: 587, name: "برنامه نویسی کامیپوتر", code: "6156174969", unit: 3, category:"BME" },
+        { id: 588, name: "برنامه نویسی کامیپوتر", code: "7000032187", unit: 3, category:"BME" },
+        { id: 589, name: "آناتومی", code: "6156108539", unit: 2, category:"BME" },
+        { id: 590, name: "کار آموزی طرح پویش کاردانی و کارشناسی 1", code: "100000", unit: 1, category:"BME" },
+        { id: 591, name: "کار آموزی طرح پویش کاردانی و کارشناسی 2", code: "100001", unit: 1, category:"BME" },
+        { id: 592, name: "اصول و افزار توان بخشی", code: "7000032198", unit: 3, category:"BME" },
+        { id: 593, name: "اصول و افزار توان بخشی", code: "6156206822", unit: 3, category:"BME" },
+        { id: 594, name: "مدیریت و کارآفرینی در مهندسی پزشکی", code: "6156149529", unit: 2, category:"BME" },
+        { id: 595, name: "فیزیک بدن انسان", code: "6156208038", unit: 3, category:"BME" },
+        { id: 596, name: "فیزیک بدن انسان", code: "7000032204", unit: 3, category:"BME" },
+        { id: 597, name: "آمار حیاتی و احتمال", code: "7000032202", unit: 3, category:"BME" },
+        { id: 598, name: "آمار حیاتی و احتمال", code: "6156181099", unit: 3, category:"BME" },
+        { id: 599, name: "اصول تصویر نگاری پزشکی", code: "6156208037", unit: 3, category:"BME" },
+        { id: 600, name: "مدار های الکتریکی 1 ", code: "6156180945", unit: 3, category:"BME" },
+        { id: 601, name: "مدار های الکتریکی 1", code: "7000032206", unit: 3, category:"BME" },
+
+
+        //---گرافیک---
+        { id: 602, name: "مبانی هنرهای تجسمی 1", code: "5808145729", unit: 3, category:"Graphic" },
+        { id: 603, name: "مبانی هنرهای تجسمی 2", code: "5808145731", unit: 3, category:"Graphic" },
+        { id: 604, name: "هنر و تمدن اسلامی 1", code: "5808155411", unit: 2, category:"Graphic" },
+        { id: 605, name: "هنر و تمدن اسلامی 2", code: "5808155412", unit: 2, category:"Graphic" },
+        { id: 606, name: "آشنایی با هنر پیش نیاز دانشگاهی", code: "55014", unit: 2, category:"Graphic" },
+        { id: 607, name: "آشنایی با هنر در تاریخ 1", code: "5808104489", unit: 2, category:"Graphic" },
+        { id: 608, name: "آشنایی با هنر در تاریخ 2", code: "5808104490", unit: 2, category:"Graphic" },
+        { id: 609, name: "طراحی پایه", code: "5808137188", unit: 3, category:"Graphic" },
+        { id: 610, name: "عکاسی مقدماتی", code: "5808205596", unit: 2, category:"Graphic" },
+        { id: 611, name: "عکاسی در گرافیک", code: "5808205680", unit: 2, category:"Graphic" },
+        { id: 612, name: "نرم افزار گرافیک 1", code: "5808205660", unit: 2, category:"Graphic" },
+        { id: 613, name: "نرم افزار گرافیک 2", code: "5808205661", unit: 2, category:"Graphic" },
+        { id: 614, name: "نرم افزار گرافیک 3", code: "5808205662", unit: 2, category:"Graphic" },
+        { id: 615, name: "خوشنویسی و گرافیک حروف", code: "5808205643", unit: 3, category:"Graphic" },
+        { id: 616, name: "پرورش خلاقیت", code: "5808114639", unit: 3, category:"Graphic" },
+        { id: 617, name: "ارتباط تصویری (خلاصه سازی)", code: "5808205629", unit: 3, category:"Graphic" },
+        { id: 618, name: "پایه نشانه 2 ارتباط تصویری", code: "5808205646", unit: 3, category:"Graphic" },
+        { id: 619, name: "صفحه آرایی 1", code: "5808136808", unit: 3, category:"Graphic" },
+        { id: 620, name: "صفحه آرایی 2", code: "5808136809", unit: 3, category:"Graphic" },
+        { id: 621, name: "مبانی نظری هنر اسلامی", code: "5808145680", unit: 2, category:"Graphic" },
+        { id: 622, name: "کارگاه تکنیک های چاپ دستی 1", code: "5808207078", unit: 2, category:"Graphic" },
+        { id: 623, name: "کارگاه تکنیک های چاپ دستی 2", code: "5808207079", unit: 2, category:"Graphic" },
+        { id: 624, name: "طراحی نشانه", code: "5808137954", unit: 3, category:"Graphic" },
+        { id: 625, name: "تجزیه و تحلیل و نقد آثار هنرهای تجسمی", code: "5808116935", unit: 2, category:"Graphic" },
+        { id: 626, name: "تجزیه و تحلیل و نقد آثار ارتباط تصویری", code: "5808117135", unit: 2, category:"Graphic" },
+        { id: 627, name: "طراحی حروف و تایپوگرافی 1", code: "5808205658", unit: 3, category:"Graphic" },
+        { id: 628, name: "طراحی حروف و تایپوگرافی 2", code: "5808205659", unit: 3, category:"Graphic" },
+        { id: 629, name: "طراحی پوستر", code: "5808137217", unit: 3, category:"Graphic" },
+        { id: 630, name: "طراحی بسته بندی", code: "5808137144", unit: 3, category:"Graphic" },
+        { id: 631, name: "گرافیک کارگاه حجم", code: "5808205686", unit: 2, category:"Graphic" },
+        { id: 632, name: "طراحی گرافیک محیطی و شهری", code: "5808205665", unit: 3, category:"Graphic" },
+        { id: 633, name: "انیمیشن", code: "5808205593", unit: 3, category:"Graphic" },
+        { id: 634, name: "کارگاه لیتوگرافی و چاپ", code: "5808205666", unit: 2, category:"Graphic" },
+        { id: 635, name: "کارگاه چاپ دستی تخصصی", code: "5808205677", unit: 2, category:"Graphic" },
+        { id: 636, name: "گرافیک چند رسانه ای", code: "5808205663", unit: 3, category:"Graphic" },
+        { id: 637, name: "طراحی هویت سازمانی", code: "5808205664", unit: 3, category:"Graphic" },
+        { id: 638, name: "معرفی هنرهای معاصر", code: "5808205692", unit: 2, category:"Graphic" },
+        { id: 639, name: "کارگاه طراحی شخصیت و کاریکاتور", code: "5808205702", unit: 2, category:"Graphic" },
+        { id: 640, name: "تصویرسازی 1", code: "5808119086", unit: 3, category:"Graphic" },
+        { id: 641, name: "تصویرسازی 2", code: "5808119087", unit: 3, category:"Graphic" },
+        { id: 642, name: "تصویرسازی پیشرفته", code: "5808205697", unit: 2, category:"Graphic" },
+
+
+        //--- رشته میکروبیولوژی ورودی 402---
+        { id: 643, name: "شیمی عمومی 1", code: "7000022389", unit: 3, category:"Microbiology02" },
+        { id: 644, name: "آز شیمی عمومی 1", code: "7000022391", unit: 1, category:"Microbiology02" },
+        { id: 645, name: "فیزیک عمومی 1", code: "7000022400", unit: 3, category:"Microbiology02" },
+        { id: 646, name: "آز فیزیک عمومی 1", code: "7000022401", unit: 1, category:"Microbiology02" },
+        { id: 647, name: "ریاضیات زیستی", code: "7000021986", unit: 3, category:"Microbiology02" },
+        { id: 648, name: "مبانی گیاه شناسی", code: "7000022474", unit: 2, category:"Microbiology02" },
+        { id: 649, name: "آز مبانی گیاه شناسی", code: "7000022475", unit: 1, category:"Microbiology02" },
+        { id: 650, name: "زیست شناسی پیش", code: "55008", unit: 2, category:"Microbiology02" },
+        { id: 651, name: "فارسی", code: "90029", unit: 3, category:"Microbiology02" },
+        { id: 652, name: "شیمی عمومی 2", code: "7000022395", unit: 2, category:"Microbiology02" },
+        { id: 653, name: "شیمی آلی 1", code: "7000022408", unit: 3, category:"Microbiology02" },
+        { id: 654, name: "آز شیمی آلی 1", code: "7000022413", unit: 1, category:"Microbiology02" },
+        { id: 655, name: "آمار زیستی", code: "7000022418", unit: 2, category:"Microbiology02" },
+        { id: 656, name: "کارگاه آمار زیستی", code: "7000022420", unit: 1, category:"Microbiology02" },
+        { id: 657, name: "مبانی جانور شناسی", code: "7000022463", unit: 2, category:"Microbiology02" },
+        { id: 658, name: "آز مبانی جانور شناسی", code: "7000022470", unit: 1, category:"Microbiology02" },
+        { id: 659, name: "مبانی بوم شناسی", code: "7000022457", unit: 3, category:"Microbiology02" },
+        { id: 660, name: "ایمنی زیستی", code: "7000024714", unit: 2, category:"Microbiology02" },
+        { id: 661, name: "زبان پیش دانشگاهی ترکیبی", code: "99093", unit: 2, category:"Microbiology02" },
+        { id: 662, name: "اندیشه اسالمی 1", code: "90610", unit: 2, category:"Microbiology02" },
+        { id: 663, name: "بیوشیمی ساختار", code: "7000022428", unit: 3, category:"Microbiology02" },
+        { id: 664, name: "آز بیوشیمی", code: "7000022434", unit: 1, category:"Microbiology02" },
+        { id: 665, name: "ژنتیک پایه", code: "7000022714", unit: 3, category:"Microbiology02" },
+        { id: 666, name: "آز ژنتیک پایه", code: "7000022443", unit: 1, category:"Microbiology02" },
+        { id: 667, name: "زیست شناسی سلولی", code: "7000022489", unit: 3, category:"Microbiology02" },
+        { id: 668, name: "آز زیست شناسی سلولی و مولکولی", code: "7000022492", unit: 1, category:"Microbiology02" },
+        { id: 669, name: "میکروبیولوژی عمومی", code: "7000022498", unit: 3, category:"Microbiology02" },
+        { id: 670, name: "آز میکروبیولوژی", code: "7000022499", unit: 1, category:"Microbiology02" },
+        { id: 671, name: "مبانی فیزیولوژی جانوری", code: "7000022471", unit: 2, category:"Microbiology02" },
+        { id: 672, name: "آز مبانی فیزیولوژی جانوری", code: "7000022472", unit: 1, category:"Microbiology02" },
+        { id: 673, name: "ژنتیک مولکولی", code: "7000022448", unit: 2, category:"Microbiology02" },
+        { id: 674, name: "بیوشیمی متابولیسم", code: "7000022436", unit: 2, category:"Microbiology02" },
+        { id: 675, name: "زیست شناسی مولکولی", code: "7000022496", unit: 2, category:"Microbiology02" },
+        { id: 676, name: "فیزیولوژی میکروبی", code: "7000022500", unit: 3, category:"Microbiology02" },
+        { id: 677, name: "آز فیزیولوژی میکروبی", code: "7000022501", unit: 1, category:"Microbiology02" },
+        { id: 678, name: "مبانی فیزیولوژی گیاهی", code: "7000022478", unit: 2, category:"Microbiology02" },
+        { id: 679, name: "آز مبانی فیزیولوژی گیاهی", code: "7000022487", unit: 1, category:"Microbiology02" },
+        { id: 680, name: "مبانی زیست شناسی تکوینی", code: "7000022722", unit: 3, category:"Microbiology02" },
+        { id: 681, name: "ویروس شناسی", code: "7000022509", unit: 3, category:"Microbiology02" },
+        { id: 682, name: "زیست شناسی تکاملی", code: "7000022718", unit: 3, category:"Microbiology02" },
+        { id: 683, name: "باکتری شناسی )گرم مثبت و میکروبیوتا(", code: "7000022502", unit: 3, category:"Microbiology02" },
+        { id: 684, name: "آز باکتری شناسی 1", code: "7000022503", unit: 1, category:"Microbiology02" },
+        { id: 685, name: "مبانی زیست فناوری میکروبی", code: "7000022538", unit: 2, category:"Microbiology02" },
+        { id: 686, name: "زیست شناسی آرکی ها", code: "7000022525", unit: 2, category:"Microbiology02" },
+        { id: 687, name: "مبانی مهندسی ژنتیک", code: "7000022529", unit: 2, category:"Microbiology02" },
+        { id: 688, name: "میکروبیولوژی غذایی", code: "7000022517", unit: 2, category:"Microbiology02" },
+        { id: 689, name: "آز میکروبیولوژی غذایی", code: "7000022518", unit: 1, category:"Microbiology02" },
+        { id: 690, name: "میکروبیولوژی صنعتی", code: "7000022513", unit: 2, category:"Microbiology02" },
+        { id: 691, name: "آز میکروبیولوژی صنعتی", code: "7000022516", unit: 1, category:"Microbiology02" },
+        { id: 692, name: "باکتری شناسی )گرم منفی و نامتعارف)", code: "7000022505", unit: 3, category:"Microbiology02" },
+        { id: 693, name: "آز باکتری شناسی 2", code: "7000022506", unit: 1, category:"Microbiology02" },
+        { id: 694, name: "متون تخصصی میکروبیولوژی", code: "7000022510", unit: 2, category:"Microbiology02" },
+        { id: 695, name: "میکروبیولوژی مولکولی", code: "7000022541", unit: 2, category:"Microbiology02" },
+        { id: 696, name: "انگل شناسی", code: "7000022523", unit: 2, category:"Microbiology02" },
+        { id: 697, name: "ایمنی شناسی", code: "7000022507", unit: 2, category:"Microbiology02" },
+        { id: 698, name: "آز ایمنی شناسی", code: "7000022508", unit: 1, category:"Microbiology02" },
+        { id: 690, name: "مبانی بیوانفورماتیک 1", code: "7000022532", unit: 1, category:"Microbiology02" },
+        { id: 691, name: "قارچ های خوراکی و سمی", code: "7000022570", unit: 2, category:"Microbiology02" },
+        { id: 692, name: "تاریخ فرهنگ و تمدن اسالمی", code: "92381", unit: 2, category:"Microbiology02" },
+        { id: 693, name: "دانش خانواده و جمعیت", code: "90128", unit: 2, category:"Microbiology02" },
+        { id: 694, name: "قارچ شناسی", code: "7000022511", unit: 2, category:"Microbiology02" },
+        { id: 695, name: "آز قارچ شناسی", code: "7000022512", unit: 1, category:"Microbiology02" },
+        { id: 696, name: "میکروبیولوژی محیطی", code: "7000022519", unit: 2, category:"Microbiology02" },
+        { id: 697, name: "آز میکروبیولوژی محیطی", code: "7000022520", unit: 1, category:"Microbiology02" },
+        { id: 698, name: "مبانی خون شناسی", code: "7000022577", unit: 2, category:"Microbiology02" },
+
+
+        //--- 403 میکروبیولوژی---
+        { id: 699, name: "زیست شناسی پیش", code: "55008", unit: 2, category:"Microbiology03" },
+        { id: 700, name: "شیمی عمومی یک", code: "7000022389", unit: 3, category:"Microbiology03" },
+        { id: 701, name: "فیزیک عمومی یک", code: "7000022400", unit: 3, category:"Microbiology03" },
+        { id: 702, name: "ریاضیات زیستی", code: "7000021986", unit: 3, category:"Microbiology03" },
+        { id: 703, name: "مبانی گیاه‌شناسی", code: "7000022474", unit: 2, category:"Microbiology03" },
+        { id: 704, name: "آزمایشگاه مبانی گیاه‌شناسی", code: "7000022475", unit: 1, category:"Microbiology03" },
+        { id: 705, name: "ایمنی زیستی", code: "7000035509", unit: 2, category:"Microbiology03" },
+        { id: 706, name: "شیمی آلی یک", code: "7000022408", unit: 3, category:"Microbiology03" },
+        { id: 707, name: "آزمایشگاه شیمی عمومی یک", code: "7000022391", unit: 1, category:"Microbiology03" },
+        { id: 708, name: "مبانی جانورشناسی", code: "7000022463", unit: 2, category:"Microbiology03" },
+        { id: 709, name: "آزمایشگاه مبانی جانورشناسی", code: "7000022470", unit: 1, category:"Microbiology03" },
+        { id: 710, name: "آمار زیستی", code: "7000022418", unit: 2, category:"Microbiology03" },
+        { id: 711, name: "مبانی بوم شناسی", code: "7000035237", unit: 3, category:"Microbiology03" },
+        { id: 712, name: "کاربینی", code: "7000035232", unit: 2, category:"Microbiology03" },
+        { id: 713, name: "آزمایشگاه فیزیک عمومی یک", code: "7000022401", unit: 1, category:"Microbiology03" },
+        { id: 714, name: "کامپیوتر و محاسبات زیستی", code: "7000022088", unit: 2, category:"Microbiology03" },
+        { id: 715, name: "آزمایشگاه شیمی آلی یک", code: "7000022413", unit: 1, category:"Microbiology03" },
+        { id: 716, name: "بیوشیمی ساختار", code: "7000022428", unit: 3, category:"Microbiology03" },
+        { id: 717, name: "ژنتیک پایه", code: "7000022714", unit: 3, category:"Microbiology03" },
+        { id: 718, name: "میکروبیولوژی عمومی", code: "7000022498", unit: 3, category:"Microbiology03" },
+        { id: 719, name: "مبانی فیزیولوژی جانوری", code: "7000022471", unit: 2, category:"Microbiology03" },
+        { id: 720, name: "آزمایشگاه مبانی فیزیولوژی جانوری", code: "7000022472", unit: 1, category:"Microbiology03" },
+        { id: 721, name: "کارگاه آمار زیستی", code: "7000022420", unit: 1, category:"Microbiology03" },
+        { id: 722, name: "بیوشیمی متابولیسم", code: "7000022436", unit: 2, category:"Microbiology03" },
+        { id: 723, name: "مبانی فیزیولوژی گیاهی", code: "7000022478", unit: 2, category:"Microbiology03" },
+        { id: 724, name: "آزمایشگاه مبانی فیزیولوژی گیاهی", code: "7000022487", unit: 1, category:"Microbiology03" },
+        { id: 725, name: "ژنتیک مولکولی", code: "7000022448", unit: 2, category:"Microbiology03" },
+        { id: 726, name: "زیست مولکولی", code: "7000022496", unit: 2, category:"Microbiology03" },
+        { id: 727, name: "زیست سلولی", code: "7000022489", unit: 3, category:"Microbiology03" },
+        { id: 728, name: "فیزیولوژی میکروبی", code: "7000022500", unit: 3, category:"Microbiology03" },
+        { id: 729, name: "آزمایشگاه ژنتیک", code: "7000022443", unit: 1, category:"Microbiology03" },
+        { id: 730, name: "آزمایشگاه میکروبیولوژی", code: "7000022499", unit: 1, category:"Microbiology03" },
+        { id: 731, name: "آزمایشگاه بیوشیمی", code: "7000022434", unit: 1, category:"Microbiology03" },
+        { id: 732, name: "باکتری شناسی(گرم مثبت و میکروبیوتا)", code: "7000022502", unit: 3, category:"Microbiology03" },
+        { id: 733, name: "انگل شناسی", code: "7000022523", unit: 2, category:"Microbiology03" },
+        { id: 734, name: "قارچ شناسی", code: "7000022511", unit: 2, category:"Microbiology03" },
+        { id: 735, name: "مبانی خون شناسی", code: "7000022577", unit: 2, category:"Microbiology03" },
+
+
+        //--- آموزش زبان انگلیسی 1400 به بعد---
+        { id: 736, name: "عربی پیش نیاز", code: "55015", unit: 2, category:"ELT00" },
+        { id: 737, name: "فلسفه و منطق", code: "55010", unit: 2, category:"ELT00" },
+        { id: 738, name: "زبان انگلیسی پیش نیاز ترکیبی", code: "99093", unit: 2, category:"ELT00" },
+        { id: 739, name: "دستور زبان پایه", code: "6089207391", unit: 2, category:"ELT00" },
+        { id: 740, name: "مهارتهای شنیداری گفتاری پایه", code: "6089151468", unit: 2, category:"ELT00" },
+        { id: 741, name: "خواندن پایه", code: "6089207390", unit: 2, category:"ELT00" },
+        { id: 742, name: "مهارتهای شنیداری گفتاری پیشرفته", code: "6089151471", unit: 2, category:"ELT00" },
+        { id: 743, name: "دستور زبان پیشرفته", code: "6089125434", unit: 2, category:"ELT00" },
+        { id: 744, name: "مهارتهای مطالعه و یادگیری", code: "6089151491", unit: 2, category:"ELT00" },
+        { id: 745, name: "زبان دوم 1", code: "6089131156", unit: 4, category:"ELT00" },
+        { id: 746, name: "آواشناسی آموزشی", code: "6089109593", unit: 2, category:"ELT00" },
+        { id: 747, name: "خواندن پیشرفته", code: "6089207392", unit: 2, category:"ELT00" },
+        { id: 748, name: "نگارش پایه", code: "6089154914", unit: 2, category:"ELT00" },
+        { id: 749, name: "مکالمه موضوعی", code: "6089152282", unit: 2, category:"ELT00" },
+        { id: 750, name: "زبان دوم 2", code: "6089131163", unit: 4, category:"ELT00" },
+        { id: 751, name: "مبانی زبانشناسی", code: "6089145028", unit: 2, category:"ELT00" },
+        { id: 752, name: "کاربرد واژگان و اصطلاحات", code: "6089207421", unit: 2, category:"ELT00" },
+        { id: 753, name: "اصول و روش ترجمه", code: "6089106274", unit: 2, category:"ELT00" },
+        { id: 754, name: "خواندن متون رسانه ای و مطبوعاتی", code: "6089124892", unit: 2, category:"ELT00" },
+        { id: 755, name: "نگارش پیشرفته", code: "6089154915", unit: 2, category:"ELT00" },
+        { id: 756, name: "خواندن متون تخصصی آموزش زبان", code: "6089207395", unit: 2, category:"ELT00" },
+        { id: 757, name: "آشنایی با ادبیات داستانی", code: "6089207397", unit: 2, category:"ELT00" },
+        { id: 758, name: "ترجمه متون ساده", code: "6089118634", unit: 2, category:"ELT00" },
+        { id: 759, name: "فنون سخنرانی و مناظره", code: "6089207419", unit: 2, category:"ELT00" },
+        { id: 760, name: "زبانشناسی کاربردی", code: "6089131251", unit: 2, category:"ELT00" },
+        { id: 761, name: "اصول و روشهای آموزش زبان", code: "6089207403", unit: 4, category:"ELT00" },
+        { id: 762, name: "خواندن انتقادی متون رسانه ای و مطبوعاتی", code: "6089207394", unit: 2, category:"ELT00" },
+        { id: 763, name: "بررسی آثار ترجمه شده اسلامی", code: "6089111056", unit: 2, category:"ELT00" },
+        { id: 764, name: "مقاله نویسی", code: "6089150701", unit: 2, category:"ELT00" },
+        { id: 765, name: "مکالمه تخصصی در مورد آموزش زبان", code: "6089207396", unit: 2, category:"ELT00" },
+        { id: 766, name: "روانشناسی یادگیری زبان 1", code: "6089207422", unit: 2, category:"ELT00" },
+        { id: 767, name: "فنون و صناعات ادبی", code: "6089140722", unit: 2, category:"ELT00" },
+        { id: 768, name: "آشنایی با ادبیات نمایشی", code: "6089207400", unit: 2, category:"ELT00" },
+        { id: 769, name: "نقد و بررسی برنامه های درسی زبان انگلیسی", code: "6089207411", unit: 2, category:"ELT00" },
+        { id: 770, name: "مدیریت کلاس", code: "6089207405", unit: 2, category:"ELT00" },
+        { id: 771, name: "نقد بررسی مواد اموزشی", code: "6089207407", unit: 2, category:"ELT00" },
+        { id: 772, name: "نگارش تخصصی در مورد آموزش زبان", code: "6089207401", unit: 2, category:"ELT00" },
+        { id: 773, name: "آموزش زبان به کودکان و نوجوانان", code: "6089207410", unit: 2, category:"ELT00" },
+        { id: 774, name: "اخلاق حرفه ای در تدریس", code: "6089205621", unit: 2, category:"ELT00" },
+        { id: 775, name: "روانشناسی یادگیری زبان 2", code: "6089207399", unit: 2, category:"ELT00" },
+        { id: 777, name: "مقدمات پژوهش", code: "6089207404", unit: 2, category:"ELT00" },
+        { id: 778, name: "تهیه مطالب درسی", code: "6089119875", unit: 2, category:"ELT00" },
+        { id: 779, name: "روش تدریس مولفه های زبان", code: "6089207408", unit: 4, category:"ELT00" },
+        { id: 780, name: "مبانی سنجش زبان", code: "6089207409", unit: 2, category:"ELT00" },
+        { id: 781, name: "شعر انگلیسی", code: "6089207402", unit: 2, category:"ELT00" },
+        { id: 782, name: "تدریس عملی 1", code: "6089118337", unit: 2, category:"ELT00" },
+        { id: 783, name: "مقدمات جامعه شناسی زبان", code: "6089207417", unit: 2, category:"ELT00" },
+        { id: 784, name: "روشهای پژوهش و تحلیل داده در آموزش زبان", code: "6089207406", unit: 2, category:"ELT00" },
+        { id: 785, name: "روش تدریس مهارتهای زبان", code: "6089128301", unit: 4, category:"ELT00" },
+        { id: 786, name: "تدریس عملی 2", code: "6089118340", unit: 2, category:"ELT00" },
+        { id: 787, name: "سنجش مولفه های زبان", code: "6089207414", unit: 2, category:"ELT00" },
+        { id: 788, name: "سنجش مهارتهای زبان", code: "6089207412", unit: 2, category:"ELT00" },
+        { id: 789, name: "مبانی آموزش زبان به کمک فناوری", code: "6089207413", unit: 2, category:"ELT00" },
+
+
+        //---مهندسی شیمی و نفت403 ---
+        { id: 790, name: "کارآموزی", code: "7000006342", unit: 2, category:"ChemicalEng03" },
+        { id: 791, name: "پروژه کارشناسی مهندسی شیمی", code: "1295115107", unit: 3, category:"ChemicalEng03" },
+        { id: 792, name: "کارآموزی طرح پویش (1)", code: "100000", unit: 2, category:"ChemicalEng03" },
+        { id: 793, name: "کارآموزی طرح پویش (2)", code: "100001", unit: 2, category:"ChemicalEng03" },
+        { id: 794, name: "کارآموزی طرح پویش (3)", code: "100002", unit: 2, category:"ChemicalEng03" },
+        { id: 795, name: "آزمایشگاه شیمی عمومی", code: "1295102343", unit: 1, category:"ChemicalEng03" },
+        { id: 796, name: "آزمایشگاه شیمی تجزیه", code: "1295102328", unit: 1, category:"ChemicalEng03" },
+        { id: 797, name: "آزمایشگاه شیمی آلی", code: "1295102317", unit: 1, category:"ChemicalEng03" },
+        { id: 798, name: "آزمایشگاه شیمی فیزیک", code: "1295102360", unit: 1, category:"ChemicalEng03" },
+        { id: 799, name: "آزمایشگاه نفت", code: "1295103183", unit: 1, category:"ChemicalEng03" },
+        { id: 800, name: "آزمایشگاه مکانیک سیالات", code: "1295103082", unit: 1, category:"ChemicalEng03" },
+        { id: 801, name: "آزمایشگاه کنترل فرآیندها", code: "1295166171", unit: 1, category:"ChemicalEng03" },
+        { id: 802, name: "آزمایشگاه عملیات واحد", code: "1295102425", unit: 1, category:"ChemicalEng03" },
+        { id: 803, name: "آزمایشگاه پلیمر", code: "1295101861", unit: 1, category:"ChemicalEng03" },
+        { id: 804, name: "آزمایشگاه انتقال حرارت", code: "1295177334", unit: 1, category:"ChemicalEng03" },
+        { id: 805, name: "آزمایشگاه فیزیک 1", code: "1295102502", unit: 1, category:"ChemicalEng03" },
+        { id: 806, name: "آزمایشگاه فیزیک 2", code: "1295102515", unit: 1, category:"ChemicalEng03" },
+        { id: 807, name: "کارگاه نرم افزار مهندسی", code: "1295160321", unit: 1, category:"ChemicalEng03" },
+        { id: 808, name: "کارگاه نرم افزار در مهندسی شیمی", code: "1295160319", unit: 1, category:"ChemicalEng03" },
+        { id: 809, name: "کارگاه عمومی", code: "1295160024", unit: 1, category:"ChemicalEng03" },
+        { id: 810, name: "ریاضی عمومی 1", code: "1295129684", unit: 3, category:"ChemicalEng03" },
+        { id: 811, name: "ریاضی عمومی 2", code: "1295129685", unit: 3, category:"ChemicalEng03" },
+        { id: 812, name: "ریاضیات پایه", code: "55001", unit: 2, category:"ChemicalEng03" },
+        { id: 813, name: "معادلات دیفرانسیل", code: "1295150350", unit: 3, category:"ChemicalEng03" },
+        { id: 814, name: "فیزیک 1", code: "1295141460", unit: 3, category:"ChemicalEng03" },
+        { id: 815, name: "فیزیک 2", code: "1295141492", unit: 3, category:"ChemicalEng03" },
+        { id: 816, name: "فیزیک مکانیک", code: "55002", unit: 3, category:"ChemicalEng03" },
+        { id: 817, name: "شیمی عمومی", code: "7000032015", unit: 3, category:"ChemicalEng03" },
+        { id: 818, name: "شیمی عمومی مهندسی شیمی", code: "1295136350", unit: 3, category:"ChemicalEng03" },
+        { id: 819, name: "شیمی آلی", code: "7000032025", unit: 3, category:"ChemicalEng03" },
+        { id: 820, name: "شیمی آلی مهندسی شیمی", code: "1295136187", unit: 3, category:"ChemicalEng03" },
+        { id: 821, name: "شیمی", code: "55003", unit: 3, category:"ChemicalEng03" },
+        { id: 822, name: "شیمی تجزیه", code: "1295136212", unit: 3, category:"ChemicalEng03" },
+        { id: 823, name: "برنامه سازی کامپیوتر", code: "7000032018", unit: 3, category:"ChemicalEng03" },
+        { id: 824, name: "برنامه نویسی کامپیوتر", code: "1295112235", unit: 3, category:"ChemicalEng03" },
+        { id: 825, name: "نقشه کشی صنعتی", code: "1295154524", unit: 2, category:"ChemicalEng03" },
+        { id: 826, name: "استاتیک و مقاومت مصالح", code: "7000032027", unit: 3, category:"ChemicalEng03" },
+        { id: 827, name: "موازنه انرژی و مواد", code: "1295152039", unit: 4, category:"ChemicalEng03" },
+        { id: 828, name: "سینتیک و طراحی راکتور", code: "7000006341", unit: 4, category:"ChemicalEng03" },
+        { id: 829, name: "عملیات واحد 1", code: "1295139131", unit: 3, category:"ChemicalEng03" },
+        { id: 830, name: "مکانیک سیالات 2", code: "1295152465", unit: 2, category:"ChemicalEng03" },
+        { id: 831, name: "فرآیندهای پالایش نفت", code: "1295139746", unit: 3, category:"ChemicalEng03" },
+        { id: 832, name: "فرآیندهای پتروشیمی", code: "1295139751", unit: 3, category:"ChemicalEng03" },
+        { id: 833, name: "آشنایی با مهندسی شیمی (کاربینی)", code: "7000040140", unit: 1, category:"ChemicalEng03" },
+        { id: 834, name: "انتقال جرم", code: "1295108770", unit: 3, category:"ChemicalEng03" },
+        { id: 835, name: "مکانیک سیالات 1", code: "1295152460", unit: 3, category:"ChemicalEng03" },
+        { id: 836, name: "ریاضی مهندسی", code: "1295129689", unit: 3, category:"ChemicalEng03" },
+        { id: 837, name: "اقتصاد و طرح مهندسی", code: "1295107150", unit: 3, category:"ChemicalEng03" },
+        { id: 838, name: "طراحی و اقتصاد مهندسی شیمی", code: "7000032039", unit: 3, category:"ChemicalEng03" },
+        { id: 839, name: "مقدمه ای بر علوم زیستی", code: "1295151051", unit: 2, category:"ChemicalEng03" },
+        { id: 840, name: "ترمودینامیک مهندسی شیمی 1", code: "1295118808", unit: 3, category:"ChemicalEng03" },
+        { id: 841, name: "انتقال حرارت 1", code: "1295175362", unit: 3, category:"ChemicalEng03" },
+        { id: 842, name: "عملیات واحد 2", code: "1295139132", unit: 3, category:"ChemicalEng03" },
+        { id: 843, name: "مبانی مهندسی پلیمر", code: "7000008208", unit: 3, category:"ChemicalEng03" },
+        { id: 844, name: "محاسبات عددی", code: "1295147380", unit: 2, category:"ChemicalEng03" },
+        { id: 845, name: "تصفیه آب و فاضلاب", code: "1295118991", unit: 3, category:"ChemicalEng03" },
+        { id: 846, name: "انتقال حرارت 2", code: "7000032033", unit: 3, category:"ChemicalEng03" },
+        { id: 847, name: "مقدمه ای بر مهندسی مخازن", code: "7000035103", unit: 3, category:"ChemicalEng03" },
+        { id: 848, name: "هوش مصنوعی و تحول دیجیتال", code: "7000032022", unit: 2, category:"ChemicalEng03" },
+        { id: 849, name: "پدیده های انتقال در محیط متخلخل", code: "7000032145", unit: 3, category:"ChemicalEng03" },
+        { id: 850, name: "شیمی فیزیک مهندسی شیمی", code: "1295136403", unit: 3, category:"ChemicalEng03" },
+        { id: 851, name: "کاربرد ریاضیات در مهندسی شیمی", code: "1295171589", unit: 3, category:"ChemicalEng03" },
+        { id: 852, name: "کنترل فرآیندها", code: "1295161738", unit: 3, category:"ChemicalEng03" },
+        { id: 853, name: "کنترل فرآیندها 1", code: "7000032038", unit: 3, category:"ChemicalEng03" },
+        { id: 854, name: "توزیع و انتقال گاز", code: "1295166385", unit: 3, category:"ChemicalEng03" },
+        { id: 855, name: "فرآیندهای صنایع گاز", code: "4396139816", unit: 3, category:"ChemicalEng03" },
+        { id: 856, name: "ترمودینامیک مهندسی شیمی 2", code: "1295118810", unit: 3, category:"ChemicalEng03" },
+
+
+        //--- حقوق تمام سالا ---
+        { id: 857, name: "مقدمه علم حقوق", code: "1068151162", unit: 2, category:"Law" },
+        { id: 858, name: "حقوق اساسی 1", code: "1068123308", unit: 2, category:"Law" },
+        { id: 859, name: "حقوق مدنی 1", code: "1068165565", unit: 2, category:"Law" },
+        { id: 860, name: "حقوق بین الملل عمومی 1", code: "1068123592", unit: 2, category:"Law" },
+        { id: 861, name: "کلیات حقوق جزا", code: "1068161377", unit: 1, category:"Law" },
+        { id: 862, name: "حقوق تجارت 1", code: "1068165563", unit: 2, category:"Law" },
+        { id: 863, name: "عربی پیش دانشگاهی", code: "55015", unit: 2, category:"Law" },
+        { id: 864, name: "فارسی پیش دانشگاهی", code: "55006", unit: 2, category:"Law" },
+        { id: 865, name: "فلسفه و منطق پیش دانشگاهی", code: "55010", unit: 2, category:"Law" },
+        { id: 866, name: "حقوق تجارت 2", code: "1068123657", unit: 2, category:"Law" },
+        { id: 867, name: "حقوق اساسی 2", code: "1068123318", unit: 2, category:"Law" },
+        { id: 868, name: "حقوق مدنی 2", code: "1068124176", unit: 2, category:"Law" },
+        { id: 869, name: "حقوق بین الملل عمومی 2", code: "1068171223", unit: 2, category:"Law" },
+        { id: 870, name: "حقوق جزای عمومی 1", code: "1068123781", unit: 2, category:"Law" },
+        { id: 871, name: "حقوق اداری 1", code: "1068123257", unit: 2, category:"Law" },
+        { id: 872, name: "اصول فقه 1", code: "1068105717", unit: 2, category:"Law" },
+        { id: 873, name: "حقوق مالیه عمومی", code: "10681124092", unit: 2, category:"Law" },
+        { id: 874, name: "حقوق مدنی 3", code: "1068124206", unit: 2, category:"Law" },
+        { id: 875, name: "حقوق تجارت 3", code: "1068165616", unit: 2, category:"Law" },
+        { id: 876, name: "حقوق بین الملل عمومی 3", code: "1068171225", unit: 2, category:"Law" },
+        { id: 877, name: "حقوق جزای عمومی 2", code: "1068123782", unit: 2, category:"Law" },
+        { id: 879, name: "حقوق اداری 2", code: "1068123269", unit: 2, category:"Law" },
+        { id: 880, name: "اصول فقه 2", code: "1068104679", unit: 2, category:"Law" },
+        { id: 881, name: "حقوق اساسی 3", code: "1068123337", unit: 2, category:"Law" },
+        { id: 882, name: "حقوق بین الملل خصوصی 1", code: "1068123468", unit: 2, category:"Law" },
+        { id: 883, name: "حقوق مدنی 4", code: "1068165621", unit: 2, category:"Law" },
+        { id: 884, name: "حقوق تجارت 4", code: "1068123694", unit: 2, category:"Law" },
+        { id: 885, name: "آیین دادرسی مدنی 1", code: "1068110186", unit: 2, category:"Law" },
+        { id: 886, name: "حقوق جزای عمومی 3", code: "1068123783", unit: 2, category:"Law" },
+        { id: 887, name: "متون فقه 1", code: "1068146910", unit: 2, category:"Law" },
+        { id: 888, name: "قواعد فقه 1", code: "1068142263", unit: 1, category:"Law" },
+        { id: 889, name: "متون حقوقی 1", code: "1068146513", unit: 1, category:"Law" },
+        { id: 890, name: "حقوق بین الملل خصوصی 2", code: "1068123469", unit: 2, category:"Law" },
+        { id: 891, name: "حقوق مدنی 5", code: "1068165623", unit: 2, category:"Law" },
+        { id: 892, name: "آیین دادرسی مدنی 2", code: "1068110195", unit: 2, category:"Law" },
+        { id: 893, name: "روش تحقیق", code: "1068127657", unit: 2, category:"Law" },
+        { id: 894, name: "جزای اختصاصی 1", code: "1068165631", unit: 2, category:"Law" },
+        { id: 895, name: "آیین دادرسی کیفری 1", code: "1068110225", unit: 2, category:"Law" },
+        { id: 896, name: "قواعد فقه 2", code: "1068165568", unit: 1, category:"Law" },
+        { id: 897, name: "متون حقوقی 2", code: "1068146543", unit: 1, category:"Law" },
+        { id: 898, name: "حقوق سازمانهای بین المللی", code: "10681124012", unit: 2, category:"Law" },
+        { id: 899, name: "حقوق مدنی 6", code: "1068124473", unit: 2, category:"Law" },
+        { id: 900, name: "آیین دادرسی مدنی 3", code: "1068110205", unit: 2, category:"Law" },
+        { id: 901, name: "متون فقه 2", code: "1068146926", unit: 2, category:"Law" },
+        { id: 902, name: "جزای اختصاصی 2", code: "1068165633", unit: 2, category:"Law" },
+        { id: 903, name: "آیین دادرسی کیفری 2", code: "1068110234", unit: 1, category:"Law" },
+        { id: 904, name: "جرم شناسی", code: "1068121886", unit: 2, category:"Law" },
+        { id: 905, name: "حقوق مدنی 7", code: "1068124291", unit: 2, category:"Law" },
+        { id: 906, name: "جزای اختصاصی 3", code: "1068165636", unit: 2, category:"Law" },
+        { id: 907, name: "متون فقه 3", code: "1068165646", unit: 2, category:"Law" },
+        { id: 908, name: "متون حقوقی 3", code: "1068171234", unit: 1, category:"Law" },
+        { id: 909, name: "حقوق کار", code: "1068124434", unit: 2, category:"Law" },
+        { id: 910, name: "ادله اثبات دعوی", code: "1068100984", unit: 2, category:"Law" },
+        { id: 911, name: "پیشگیری از جرم", code: "1068115557", unit: 1, category:"Law" },
+        { id: 912, name: "جزای اختصاصی 4", code: "1068165638", unit: 1, category:"Law" },
+        { id: 913, name: "حقوق بشر در اسلام", code: "1068124444", unit: 2, category:"Law" },
+        { id: 914, name: "حقوق مدنی 8", code: "1068113393", unit: 2, category:"Law" },
+        { id: 915, name: "پزشکی قانونی", code: "1068115183", unit: 1, category:"Law" },
+        { id: 916, name: "متون فقه 4", code: "1068165649", unit: 2, category:"Law" },
+        { id: 917, name: "حقوق تطبیقی", code: "1068123742", unit: 2, category:"Law" },
+        { id: 918, name: "متون حقوقی 4", code: "1068146576", unit: 1, category:"Law" },
+        // دروس اختیاری (طبق جدول پایین PDF)
+        { id: 919, name: "جرم شناسی کودکان و نوجوانان", code: "1068121908", unit: 1, category:"Law" },
+        { id: 920, name: "کیفرشناسی", code: "1068161938", unit: 1, category:"Law" },
+        { id: 921, name: "اجرای احکام جزائی", code: "1068100406", unit: 1, category:"Law" },
+        { id: 922, name: "اخلاق حقوق و قضا", code: "1068100736", unit: 1, category:"Law" },
+        { id: 923, name: "حقوق مالکیت فکری", code: "1068124077", unit: 1, category:"Law" },
+        { id: 924, name: "حقوق ثبت", code: "1068127756", unit: 1, category:"Law" },
+        { id: 925, name: "حقوق بیمه", code: "1068163556", unit: 1, category:"Law" },
+        { id: 926, name: "حقوق قراردادهای نوین", code: "1068124069", unit: 1, category:"Law" },
+        { id: 927, name: "حقوق تجارت الکترونیک", code: "1068123708", unit: 1, category:"Law" },
+        { id: 928, name: "حقوق رسانه", code: "1068123999", unit: 1, category:"Law" },
+        { id: 929, name: "تاریخ حقوق", code: "1068116169", unit: 1, category:"Law" },
+        { id: 930, name: "حقوق محیط زیست", code: "1068124106", unit: 1, category:"Law" },
+        { id: 931, name: "فلسفه حقوق", code: "1068140232", unit: 1, category:"Law" },
+        { id: 932, name: "منطق حقوق", code: "1068151355", unit: 1, category:"Law" },
+        { id: 933, name: "حقوق پزشکی", code: "1068123621", unit: 1, category:"Law" },
+        { id: 934, name: "حقوق فناوری های نوین", code: "1068124058", unit: 1, category:"Law" },
+        { id: 935, name: "کارآموزی قضائی", code: "1068157563", unit: 1, category:"Law" },
+        { id: 936, name: "حقوق و استاندارد", code: "1068123373", unit: 1, category:"Law" },
+        { id: 937, name: "فلسفه حق", code: "1068140230", unit: 1, category:"Law" },
+        { id: 938, name: "اجرای احکام مدنی", code: "1068100409", unit: 1, category:"Law" },
+        { id: 939, name: "حقوق دریایی", code: "1068171248", unit: 1, category:"Law" },
+        { id: 940, name: "حقوق و اقتصاد", code: "1068124375", unit: 1, category:"Law" },
+        { id: 941, name: "حقوق هوایی", code: "106812366", unit: 1, category:"Law" },
+        { id: 942, name: "جامعه شناسی حقوق", code: "1068121578", unit: 1, category:"Law" },
+        { id: 943, name: "حقوق فضای مجازی", code: "1068124051", unit: 1, category:"Law" },
+        { id: 944, name: "داوری بین المللی", code: "1068125158", unit: 1, category:"Law" },
+        { id: 945, name: "مسئولیت های مدنی خاص", code: "1068150070", unit: 1, category:"Law" },
+
+
+        //---مکانیک---
+        { id: 946, name: "مکانیک سیالات 1", code: "7000012926", unit: 3, category:"MechanicalEng" },
+        { id: 947, name: "انتقال حرارت 1", code: "7000012933", unit: 3, category:"MechanicalEng" },
+        { id: 948, name: "ریاضیات پایه(پیش نیاز دانشگاهی)", code: "55001", unit: 2, category:"MechanicalEng" },
+        { id: 949, name: "محاسبات عددی", code: "7000033239", unit: 2, category:"MechanicalEng" },
+        { id: 950, name: "طراحی سیستم های تبرید وسردخانه", code: "7000012991", unit: 3, category:"MechanicalEng" },
+        { id: 951, name: "ترمودینامیک 2", code: "7000012924", unit: 3, category:"MechanicalEng" },
+        { id: 952, name: "ریاضی مهندسی", code: "7000033244", unit: 3, category:"MechanicalEng" },
+        { id: 953, name: "دانش مهندسی مواد", code: "7000033243", unit: 3, category:"MechanicalEng" },
+        { id: 954, name: "زبان تخصصی مکانیک", code: "7000012942", unit: 3, category:"MechanicalEng" },
+        { id: 955, name: "مکانیک سیالات 2", code: "7000012927", unit: 3, category:"MechanicalEng" },
+        { id: 956, name: "ترمودینامیک 1", code: "7000012923", unit: 3, category:"MechanicalEng" },
+        { id: 957, name: "دینامیک ماشین", code: "7000012934", unit: 3, category:"MechanicalEng" },
+        { id: 958, name: "استاتیک", code: "7000012919", unit: 3, category:"MechanicalEng" },
+        { id: 959, name: "برنامه سازی کامپیوتر", code: "7000033242", unit: 3, category:"MechanicalEng" },
+        { id: 960, name: "طراحی اجزاء 2", code: "7000029887", unit: 3, category:"MechanicalEng" },
+        { id: 961, name: "دینامیک", code: "7000012920", unit: 3, category:"MechanicalEng" },
+        { id: 962, name: "ارتعاشات مکانیکی", code: "7000012935", unit: 3, category:"MechanicalEng" },
+        { id: 963, name: "طراحی اجزاء 1", code: "7000033250", unit: 3, category:"MechanicalEng" },
+        { id: 964, name: "مقاومت مصالح 1", code: "7000012921", unit: 3, category:"MechanicalEng" },
+        { id: 965, name: "آزمایشگاه مقاومت مصالح", code: "7000012932", unit: 1, category:"MechanicalEng" },
+        { id: 966, name: "اقتصاد مهندسی", code: "7000012949", unit: 2, category:"MechanicalEng" },
+        { id: 967, name: "معادلات دیفرانسیل", code: "1359150350", unit: 3, category:"MechanicalEng" },
+        { id: 968, name: "ریاضی عمومی 2", code: "1359129685", unit: 3, category:"MechanicalEng" },
+        { id: 969, name: "ریاضی عمومی 1", code: "1359129684", unit: 3, category:"MechanicalEng" },
+        { id: 970, name: "انتقال حرارت 2", code: "7000005107", unit: 3, category:"MechanicalEng" },
+        { id: 971, name: "نقشه کشی صنعتی به کمک کامپیوتر", code: "7000033260", unit: 2, category:"MechanicalEng" },
+        { id: 972, name: "نقشه کشی صنعتی", code: "7000033246", unit: 2, category:"MechanicalEng" },
+        { id: 973, name: "کارآموزی 2", code: "1359156433", unit: 0.5, category:"MechanicalEng" },
+        { id: 974, name: "پروژه پایانی", code: "1359114704", unit: 0.5, category:"MechanicalEng" },
+        { id: 975, name: "آمار و احتمالات مهندسی", code: "7000033238", unit: 3, category:"MechanicalEng" },
+        { id: 976, name: "مکانیک سیالات 1", code: "7000033247", unit: 3, category:"MechanicalEng" },
+        { id: 977, name: "آزمایشگاه دینامیک ماشین و ارتعاشات", code: "1359102077", unit: 1, category:"MechanicalEng" },
+        { id: 978, name: "فیزیک مکانیک(پیش نیاز دانشگاهی)", code: "55002", unit: 2, category:"MechanicalEng" },
+        { id: 979, name: "فیزیک 1", code: "6000141460", unit: 3, category:"MechanicalEng" },
+        { id: 980, name: "فیزیک 2", code: "7000033240", unit: 3, category:"MechanicalEng" },
+        { id: 981, name: "آزمایشگاه علم مواد", code: "5999102417", unit: 1, category:"MechanicalEng" },
+        { id: 982, name: "فیزیک 1", code: "1359141460", unit: 3, category:"MechanicalEng" },
+        { id: 983, name: "آزمایشگاه فیزیک 1", code: "7000033241", unit: 1, category:"MechanicalEng" },
+        { id: 984, name: "انتقال حرارت 1", code: "7000033253", unit: 3, category:"MechanicalEng" },
+        { id: 985, name: "ارتعاشات مکانیکی", code: "7000033255", unit: 3, category:"MechanicalEng" },
+        { id: 986, name: "معادلات دیفرانسیل", code: "7000033237", unit: 3, category:"MechanicalEng" },
+        { id: 987, name: "شیمی عمومی", code: "1359136326", unit: 3, category:"MechanicalEng" },
+        { id: 988, name: "علم مواد", code: "7000012922", unit: 3, category:"MechanicalEng" },
+        { id: 989, name: "روش های تولید و کارگاه", code: "7000033262", unit: 3, category:"MechanicalEng" },
+        { id: 990, name: "مدیریت و کنترل پروژه", code: "1359149532", unit: 2, category:"MechanicalEng" },
+        { id: 991, name: "آزمایشگاه فیزیک 2", code: "7000012963", unit: 1, category:"MechanicalEng" },
+        { id: 992, name: "آزمایشگاه مبانی مهندسی برق", code: "7000012940", unit: 1, category:"MechanicalEng" },
+        { id: 993, name: "مبانی مهندسی برق 2", code: "7000012939", unit: 3, category:"MechanicalEng" },
+        { id: 994, name: "مبانی مهندسی برق 1", code: "7000012938", unit: 3, category:"MechanicalEng" },
+        { id: 995, name: "کارگاه جوشکاری و ورقکاری", code: "7000012945", unit: 1, category:"MechanicalEng" },
+        { id: 996, name: "کارگاه اتومکانیک", code: "7000012946", unit: 1, category:"MechanicalEng" },
+        { id: 997, name: "کارگاه ماشین ابزار و ابزار سازی", code: "7000012947", unit: 1, category:"MechanicalEng" },
+        { id: 998, name: "آزمایشگاه ترمودینامیک", code: "1359101902", unit: 1, category:"MechanicalEng" },
+        { id: 999, name: "آزمایشگاه مکانیک سیالات", code: "7000012928", unit: 1, category:"MechanicalEng" },
+        { id: 1000, name: "آزمایشگاه مکانیک سیالات", code: "7000012985", unit: 1, category:"MechanicalEng" },
+        { id: 1001, name: "مقدمه ای برا اجزاء محدود", code: "1359151048", unit: 3, category:"MechanicalEng" },
       
         
     ];
@@ -1043,7 +1516,7 @@
 
     let favorites = JSON.parse(localStorage.getItem('fav_codes')) || [];
     let currentCategory = 'none';
-    showOnlyFavs = false; 
+    let showOnlyFavs = false; 
 
     function adjustLayout() {
         const header = document.getElementById('mainHeader');
@@ -1134,33 +1607,30 @@
 
     async function copyToClipboard(text) {
         try {
-            if (navigator.clipboard && window.isSecureContext) {
-                await navigator.clipboard.writeText(text);
-                showToast();
-                return true;
+            await navigator.clipboard.writeText(text);
+            showToast();
+            return true;
+        } catch (err) {
+            try {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;';
+                document.body.appendChild(textArea);
+                textArea.select();
+                textArea.setSelectionRange(0, 99999);
+                
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                if (successful) {
+                    showToast();
+                    return true;
+                }
+            } catch (e) {
+                console.error('Copy failed:', e);
             }
             
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            textArea.style.top = '-999999px';
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            const success = document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
-            if (success) {
-                showToast();
-                return true;
-            } else {
-                throw new Error('کپی ناموفق بود');
-            }
-        } catch (error) {
-            console.error('خطا در کپی کردن:', error);
-            alert("متاسفانه کپی خودکار کار نکرد. متن را دستی کپی کنید:\n\n" + text);
+            alert(`کد درس: ${text}\n\nاین کد را کپی کنید.`);
             return false;
         }
     }
@@ -1371,6 +1841,26 @@
     renderCodes();
     setTimeout(adjustLayout, 100);
 
+    function selectCategory(cat, label) {
+        currentCategory = cat;
+        document.getElementById('categoryLabel').innerText = label;
+        
+        showOnlyFavs = false;
+        const btn = document.getElementById('favFilterBtn');
+        btn.classList.remove('bg-yellow-100', 'border-yellow-400', 'text-yellow-700');
+        
+        document.querySelectorAll('[onclick^="selectCategory"]').forEach(el => {
+            el.classList.remove('bg-blue-100', 'text-blue-700');
+        });
+        event.target.classList.add('bg-blue-100', 'text-blue-700');
+        
+        renderCodes(document.getElementById('searchInput').value);
+    }
+
+    function filterCategory(cat) {
+        selectCategory(cat, document.querySelector(`[data-cat="${cat}"]`)?.innerText || cat);
+    }
+
 </script>
 
 <footer class="flex-none py-4 bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-center z-10 mt-5" dir="rtl">
@@ -1386,4 +1876,3 @@
 
 </body>
 </html>
-
