@@ -1,0 +1,317 @@
+.course-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border: 2px solid var(--border-color, #e5e7eb);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--bg-primary, #fff);
+    accent-color: var(--primary-color, #6366f1);
+}
+
+.course-checkbox:hover {
+    border-color: var(--primary-color, #6366f1);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.course-checkbox:checked {
+    background: linear-gradient(135deg, var(--primary-color, #6366f1), var(--secondary-color, #8b5cf6));
+    border-color: var(--primary-color, #6366f1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='white' d='M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 11-1.06-1.06l7.25-7.25a.75.75 0 011.06 0z'/%3E%3Cpath fill='white' d='M2.22 9.22l2.5-2.5a.75.75 0 111.06 1.06l-2.5 2.5a.75.75 0 11-1.06-1.06z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 60%;
+}
+
+.course-checkbox:checked:hover {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.course-checkbox:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.course-checkbox:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+.course-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.course-card:has(.course-checkbox:checked) {
+    border-color: var(--primary-color, #6366f1);
+    background: linear-gradient(135deg, 
+        rgba(99, 102, 241, 0.05) 0%, 
+        rgba(139, 92, 246, 0.02) 100%);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+    transform: translateY(-2px);
+}
+
+.course-card:has(.course-checkbox:checked):hover {
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.15);
+}
+
+.course-card:hover {
+    border-color: var(--border-color, #e5e7eb);
+}
+
+
+#selectionCount {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    background: linear-gradient(135deg, var(--primary-color, #6366f1), var(--secondary-color, #8b5cf6));
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    animation: selectPulse 0.3s ease;
+}
+
+@keyframes selectPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+
+#shareBtn {
+    position: relative;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+#shareBtn:not(:disabled) {
+    opacity: 1;
+}
+
+#shareBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#shareBtn:not(:disabled):hover {
+    transform: scale(1.15);
+    filter: brightness(1.1);
+}
+
+#shareBtn:not(:disabled):active {
+    transform: scale(0.95);
+}
+
+
+#shareMenu {
+    animation: shareMenuSlideDown 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: var(--bg-secondary, #fff);
+    backdrop-filter: blur(10px);
+}
+
+@keyframes shareMenuSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+#shareMenu button {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    text-align: right;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary, #1f2937);
+    font-family: inherit;
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#shareMenu button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-tertiary, rgba(99, 102, 241, 0.05));
+    transition: left 0.2s ease;
+    z-index: -1;
+}
+
+#shareMenu button:hover::before {
+    left: 0;
+}
+
+#shareMenu button:hover {
+    color: var(--primary-color, #6366f1);
+    transform: translateX(-4px);
+}
+
+#shareMenu button:active {
+    transform: translateX(-4px) scale(0.98);
+}
+
+#shareMenu button + button {
+    border-top: 1px solid var(--border-color, #e5e7eb);
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+    .course-checkbox {
+        background: var(--bg-secondary, #1f2937);
+        border-color: var(--border-color, #374151);
+    }
+
+    .course-checkbox:hover {
+        border-color: var(--primary-color, #818cf8);
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.1);
+    }
+
+    .course-checkbox:checked {
+        background: linear-gradient(135deg, var(--primary-color, #818cf8), var(--secondary-color, #a78bfa));
+        border-color: var(--primary-color, #818cf8);
+    }
+
+    .course-card:has(.course-checkbox:checked) {
+        background: linear-gradient(135deg, 
+            rgba(129, 140, 248, 0.08) 0%, 
+            rgba(167, 139, 250, 0.04) 100%);
+    }
+
+    #shareMenu button {
+        color: var(--text-primary, #f3f4f6);
+    }
+
+    #shareMenu button:hover {
+        color: var(--primary-color, #818cf8);
+    }
+
+    #shareMenu button::before {
+        background: var(--bg-tertiary, rgba(129, 140, 248, 0.08));
+    }
+}
+
+
+@media (max-width: 768px) {
+    .course-checkbox {
+        width: 22px;
+        height: 22px;
+    }
+
+    #shareMenu {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 80px !important;
+        left: 12px !important;
+        right: 12px !important;
+        min-width: auto !important;
+        width: calc(100% - 24px) !important;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    #shareMenu button {
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+
+    #selectionCount {
+        font-size: 11px;
+        width: 22px;
+        height: 22px;
+    }
+
+    .course-card:has(.course-checkbox:checked) {
+        border-width: 2px;
+    }
+}
+
+
+@media (max-width: 1024px) and (min-width: 769px) {
+    .course-checkbox {
+        width: 22px;
+        height: 22px;
+    }
+
+    #shareMenu {
+        min-width: 240px;
+    }
+}
+
+
+.course-checkbox:focus-visible {
+    outline: 2px solid var(--primary-color, #6366f1);
+    outline-offset: 2px;
+}
+
+#shareMenu button:focus-visible {
+    outline: 2px solid var(--primary-color, #6366f1);
+    outline-offset: -2px;
+}
+
+#shareBtn:focus-visible {
+    outline: 2px solid var(--primary-color, #6366f1);
+    outline-offset: 2px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .course-checkbox,
+    .course-card,
+    #shareBtn,
+    #shareMenu {
+        transition: none;
+        animation: none;
+    }
+
+    #selectionCount {
+        animation: none;
+    }
+}
+
+
+
+@media print {
+    .course-checkbox,
+    #shareBtn,
+    #shareMenu {
+        display: none !important;
+    }
+
+    .course-card:has(.course-checkbox:checked) {
+        border-color: #000;
+        background: none;
+    }
+}

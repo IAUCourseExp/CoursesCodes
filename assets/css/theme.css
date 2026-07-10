@@ -1,0 +1,169 @@
+:root {
+    color-scheme: light;
+    
+    /* ========= Brand ========= */
+    --primary: #6366F1;
+    --primary-hover: #5458EE;
+    --primary-light: #EEF2FF;
+    --secondary: #06B6D4;
+    --accent: #8B5CF6;
+    
+
+    --background: #FFFFFF;     
+    --surface: #F5F7FA;          
+    --surface-hover: #EEF2FF;    
+    
+    --text: #0F172A;              
+    --text-secondary: #475569;
+    --text-light: #94A3B8;
+    --border: #E2E8F0;           
+
+    --glow-1: rgba(99, 102, 241, 0.15);
+    --glow-2: rgba(6, 182, 212, 0.12);
+    --glow-3: rgba(139, 92, 246, 0.10);
+    --header-bg: rgba(255, 255, 255, 0.95);
+    
+    --transition: .3s ease;
+}
+
+/* ==========================================
+            Variables: Dark Theme (Deep & Rich)
+========================================== */
+.dark {
+    color-scheme: dark;
+    
+    --background: #0B1120;       
+    --surface: #182235;          
+    --surface-hover: #202C43;
+    
+    --text: #F8FAFC;              
+    --text-secondary: #CBD5E1;
+    --text-light: #94A3B8;
+    --border: #273449;
+
+   
+    --glow-1: rgba(99, 102, 241, 0.12);
+    --glow-2: rgba(6, 182, 212, 0.08);
+    --glow-3: rgba(139, 92, 246, 0.06);
+    --header-bg: rgba(24, 34, 53, 0.85);
+}
+
+
+@media (prefers-color-scheme: dark) {
+    :root:not(.light) { 
+        color-scheme: dark;
+        --background: #0B1120;
+        --surface: #182235;
+        --surface-hover: #202C43;
+        --text: #F8FAFC;
+        --text-secondary: #CBD5E1;
+        --text-light: #94A3B8;
+        --border: #273449;
+        --glow-1: rgba(99, 102, 241, 0.12);
+        --glow-2: rgba(6, 182, 212, 0.08);
+        --glow-3: rgba(139, 92, 246, 0.06);
+        --header-bg: rgba(24, 34, 53, 0.85);
+    }
+}
+
+/* ==========================================
+            Global Styles
+========================================== */
+body {
+    background-color: var(--background);
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at top left, var(--glow-1), transparent 40%),
+        radial-gradient(circle at bottom right, var(--glow-2), transparent 40%),
+        radial-gradient(circle at center, var(--glow-3), transparent 50%);
+    background-attachment: fixed;
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.header {
+    background: var(--header-bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+
+
+body {
+    background-color: var(--background) !important;
+    color: var(--text) !important;
+}
+
+
+.hero {
+    color: var(--text) !important;
+}
+
+.search-box {
+    background-color: var(--surface) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+}
+
+.search-box input {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+.search-box input::placeholder {
+    color: var(--text-light) !important;
+}
+
+.search-icon {
+    color: var(--text-secondary) !important;
+}
+
+
+.courses-section h3 {
+    color: var(--text) !important;
+}
+
+.course-count {
+    background-color: var(--primary-light) !important;
+    color: var(--primary) !important;
+}
+
+
+.courses-grid > div, .course-card {
+    background-color: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+    transition: all var(--transition) !important;
+}
+
+.courses-grid > div:hover, .course-card:hover {
+    background-color: var(--surface-hover) !important;
+    border-color: var(--primary) !important;
+}
+
+
+.modal-content {
+    background-color: var(--surface) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border) !important;
+}
+
+.modal-label {
+    color: var(--text-secondary) !important;
+}
+
+.modal-value {
+    color: var(--text) !important;
+}
+
+.modal-close {
+    color: var(--text-secondary) !important;
+}
+.modal-close:hover {
+    color: var(--danger) !important;
+}

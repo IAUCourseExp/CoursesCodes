@@ -1,0 +1,58 @@
+:root {
+    /* ========= Brand  ========= */
+    --primary: #6366F1;
+    --primary-hover: #5458EE;
+    --primary-light: #EEF2FF;
+
+    --secondary: #06B6D4;
+    --accent: #8B5CF6;
+
+    --success: #22C55E;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+
+    /* ========= Light Mode Background ========= */
+    --background: #F8FAFC;       
+    --surface: #FFFFFF;          
+    --surface-hover: #F1F5F9;
+
+    /* ========= Light Mode Text ========= */
+    --text: #0F172A;              
+    --text-secondary: #475569;    
+    --text-light: #94A3B8;
+
+    /* ========= Light Mode Border ========= */
+    --border: #E2E8F0;
+
+    /* ========= Radius ========= */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+
+    /* ========= Shadow ========= */
+    --shadow-sm: 0 4px 10px rgba(15, 23, 42, 0.03);
+    --shadow-md: 0 12px 30px rgba(15, 23, 42, 0.06);
+    --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.1);
+
+    /* ========= Animation ========= */
+    --transition: .25s ease;
+}
+
+/* ===============================
+        Dark Mode
+================================ */
+.dark {
+    --background: #0B1120;
+    --surface: #182235;
+    --surface-hover: #202C43;
+
+    --text: #F8FAFC;
+    --text-secondary: #CBD5E1;
+    --text-light: #94A3B8;
+
+    --border: #273449;
+    
+    --shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.4);
+}

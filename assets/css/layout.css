@@ -1,0 +1,132 @@
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top left,
+            var(--glow-1),
+            transparent 40%),
+        radial-gradient(circle at bottom right,
+            var(--glow-2),
+            transparent 40%),
+        radial-gradient(circle at center,
+            var(--glow-3),
+            transparent 50%),
+        var(--background);
+
+    color: var(--text);
+    transition:
+        background .35s ease,
+        color .35s ease;
+}
+
+
+/* ==========================
+        Container
+========================== */
+
+.container{
+    width:min(1200px,92%);
+    margin-inline:auto;
+}
+
+
+/* ==========================
+        Main
+========================== */
+
+main{
+    padding-top:110px;
+    padding-bottom:40px;
+}
+
+
+/* ==========================
+        Section
+========================== */
+
+section{
+    margin-block:32px;
+}
+
+
+/* ==========================
+        Responsive
+========================== */
+
+@media (max-width:768px){
+
+    main{
+        padding-top:160px;
+    }
+
+    .container{
+        width:94%;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        height: auto;
+        padding-block: 16px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .logo {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    main {
+        padding-top: 160px; 
+    }
+
+    .hero h2 {
+        font-size: 26px;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+
+    .search-box {
+        height: 56px;
+        padding: 0 16px;
+        margin-top: 24px;
+    }
+
+
+    .courses-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+
+    .course-card {
+        padding: 16px;
+    }
+
+    .course-top h4 {
+        font-size: 18px;
+    }
+
+    .course-actions {
+        margin-top: 20px;
+    }
+}
+
+@media print {
+    .header, .hero, .search-box, .course-actions, .btn-share, .theme-toggle { 
+        display: none !important; 
+    }
+    main { 
+        padding-top: 0 !important; 
+    }
+    .course-card { 
+        border: 1px solid #ccc !important; 
+        box-shadow: none !important;
+        page-break-inside: avoid; 
+    }
+}
