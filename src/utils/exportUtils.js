@@ -93,14 +93,16 @@ export function exportToPDF(data, title = 'گزارش') {
   }
 }
 
-export function shareFavorites(favorites) {
+export function shareFavorites(favorites, totalUnits) {
   if (!favorites || favorites.length === 0) {
     alert('هیچ دوره‌ای برای اشتراک‌گذاری وجود ندارد.');
     return;
   }
 
-  const text = `دوره‌های مورد علاقه من:\n${favorites.join('\n')}`;
-  
+  const list = favorites.map((item, index) => `${index + 1}. ${item}`).join('\n');
+
+  const text = `📚 لیست دروس انتخابی من:\n\n${list}\n\n✅ مجموع واحدها: ${totalUnits}\n\n\nhttps://iaucourseexp.github.io/CoursesCodes/\nمرجع کد دروس آزاد شیراز`;
+
   if (navigator.share) {
     navigator.share({
       title: 'دوره‌های مورد علاقه',

@@ -19,24 +19,24 @@ export default function FooterStats({ favorites, courses }) {
         </div>
 
         <div className="grid grid-cols-3 gap-2 w-full md:w-auto">
-          
+  
           <button 
-            onClick={() => shareFavorites(favItems)} 
-            className="bg-indigo-600 hover:bg-indigo-500 px-2 py-2 rounded-xl text-sm font-bold transition-colors cursor-pointer shadow-lg shadow-indigo-600/25 text-center"
+            onClick={() => shareFavorites(favItems.map(item => `${item.name} (${item.code}) - ${item.unit} واحد`), totalUnits)} 
+            className="bg-indigo-600 hover:bg-indigo-500 px-3 py-2 rounded-full text-sm font-bold transition-colors cursor-pointer shadow-lg shadow-indigo-600/25 text-center"
           >
             اشتراک‌گذاری 📤
           </button>
           
           <button 
             onClick={() => exportToExcel(favItems)} 
-            className="bg-emerald-600 hover:bg-emerald-500 px-2 py-2 rounded-xl text-sm font-bold transition-colors cursor-pointer shadow-lg shadow-emerald-600/25 text-center"
+            className="bg-emerald-600 hover:bg-emerald-500 px-3 py-2 rounded-full text-sm font-bold transition-colors cursor-pointer shadow-lg shadow-emerald-600/25 text-center"
           >
             اکسل 📊
           </button>
           
           <button 
             onClick={() => exportToPDF(favItems)} 
-            className="bg-rose-600 hover:bg-rose-500 px-2 py-2 rounded-xl text-sm font-bold transition-colors cursor-pointer shadow-lg shadow-rose-600/25 text-center"
+            className="bg-rose-600 hover:bg-rose-500 px-3 py-2 rounded-full text-sm font-bold transition-colors cursor-pointer shadow-lg shadow-rose-600/25 text-center"
           >
             PDF 📄
           </button>
